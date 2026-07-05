@@ -6,7 +6,7 @@ import Paper from "../../../components/design-system/Paper";
 import Input from "../../../components/ui/Input";
 import Button from "../../../components/ui/Button";
 import { TableSkeleton, FormSkeleton, PageSkeleton } from "../../../components/ui/Skeleton";
-import { FiSave, FiPlus, FiX } from "react-icons/fi";
+import { FiSave, FiPlus, FiX, FiChevronUp, FiChevronDown, FiCheck } from "react-icons/fi";
 import { api } from "../../../lib/api";
 
 function ToggleSwitch({ checked, onChange, label, description }) {
@@ -80,6 +80,16 @@ export default function AdminSettings() {
       show_team_preview: true,
       show_neon_effect: true,
       show_sponsors: true,
+      section_order: [
+        "college",
+        "stats",
+        "featured_project",
+        "events",
+        "latest_paper",
+        "recent_achievement",
+        "team_preview",
+        "sponsors"
+      ]
     },
     enable_launch_mode: false,
     launch_date: "",
@@ -101,6 +111,7 @@ export default function AdminSettings() {
           homepage_sections: {
             ...prev.homepage_sections,
             ...(data?.homepage_sections || {}),
+            section_order: (data?.homepage_sections?.section_order || prev.homepage_sections.section_order).filter(id => id !== 'activity_feed'),
           },
           club_stats: {
             ...prev.club_stats,
@@ -147,6 +158,51 @@ export default function AdminSettings() {
       ...prev,
       ticker_items: prev.ticker_items.filter((_, i) => i !== index),
     }));
+  };
+
+  const moveSectionUp = (index) => {
+    if (index === 0) return;
+    setFormData(prev => {
+      const order = [...prev.homepage_sections.section_order];
+      const temp = order[index];
+      order[index] = order[index - 1];
+      order[index - 1] = temp;
+      return {
+        ...prev,
+        homepage_sections: {
+          ...prev.homepage_sections,
+          section_order: order
+        }
+      };
+    });
+  };
+
+  const moveSectionDown = (index) => {
+    if (index === formData.homepage_sections.section_order.length - 1) return;
+    setFormData(prev => {
+      const order = [...prev.homepage_sections.section_order];
+      const temp = order[index];
+      order[index] = order[index + 1];
+      order[index + 1] = temp;
+      return {
+        ...prev,
+        homepage_sections: {
+          ...prev.homepage_sections,
+          section_order: order
+        }
+      };
+    });
+  };
+
+  const SECTION_LABELS = {
+    college: "College Section",
+    stats: "Club Stats",
+    featured_project: "Featured Project",
+    events: "Events",
+    latest_paper: "Latest Paper",
+    recent_achievement: "Recent Achievement",
+    team_preview: "Team Preview",
+    sponsors: "Sponsors"
   };
 
 
@@ -475,18 +531,6 @@ export default function AdminSettings() {
               description="Latest achievement or award"
             />
             <ToggleSwitch
-              checked={formData.homepage_sections.show_activity_feed}
-              onChange={(val) =>
-                handleNestedChange(
-                  "homepage_sections",
-                  "show_activity_feed",
-                  val
-                )
-              }
-              label="Live Feed"
-              description="Recent activity timeline"
-            />
-            <ToggleSwitch
               checked={formData.homepage_sections.show_team_preview}
               onChange={(val) =>
                 handleNestedChange(
@@ -519,6 +563,38 @@ export default function AdminSettings() {
               description="Show sponsors on the homepage"
             />
           </div>
+
+          <div className="mt-8 border-t border-slate-200 dark:border-[#30363d] pt-6">
+            <h3 className="font-semibold text-lg mb-4">Section Order</h3>
+            <p className="text-sm text-slate-500 dark:text-slate-400 mb-4">
+              Use the arrows to change the order of sections on the homepage.
+            </p>
+            <div className="flex flex-col gap-2 max-w-md">
+              {formData.homepage_sections.section_order?.map((sectionId, index) => (
+                <div key={sectionId} className="flex items-center justify-between p-3 bg-slate-50 dark:bg-[#0d1117] border border-slate-200 dark:border-[#30363d] rounded-lg">
+                  <span className="font-medium text-sm">{SECTION_LABELS[sectionId] || sectionId}</span>
+                  <div className="flex items-center gap-1">
+                    <button
+                      type="button"
+                      onClick={() => moveSectionUp(index)}
+                      disabled={index === 0}
+                      className="p-1 text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 hover:bg-slate-200 dark:hover:bg-[#30363d] rounded disabled:opacity-30 disabled:hover:bg-transparent"
+                    >
+                      <FiChevronUp size={18} />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => moveSectionDown(index)}
+                      disabled={index === formData.homepage_sections.section_order.length - 1}
+                      className="p-1 text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 hover:bg-slate-200 dark:hover:bg-[#30363d] rounded disabled:opacity-30 disabled:hover:bg-transparent"
+                    >
+                      <FiChevronDown size={18} />
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
 
 
@@ -527,10 +603,11 @@ export default function AdminSettings() {
           <Button
             type="submit"
             variant="primary"
-            icon={<FiSave />}
+            icon={success ? <FiCheck /> : <FiSave />}
             disabled={saving}
+            className={success ? "!bg-green-500 !text-white transition-colors duration-300" : "transition-colors duration-300"}
           >
-            {saving ? "Saving..." : "Save Settings"}
+            {saving ? "Saving..." : success ? "Saved!" : "Save Settings"}
           </Button>
         </div>
       </form>

@@ -23,7 +23,7 @@ export default function ClubStats({ stats, settings }) {
   ];
 
   return (
-    <section className="py-20 px-4 w-full relative z-10 border-t border-[var(--color-border-subtle)]">
+    <section className="py-12 px-4 w-full relative z-10 border-t border-[var(--color-border-subtle)]">
       <div className="container mx-auto max-w-7xl">
         <div className="flex flex-col items-center text-center mb-16">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[var(--color-border-subtle)] mb-6">

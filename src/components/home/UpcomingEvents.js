@@ -8,7 +8,7 @@ export default function UpcomingEvents({ events }) {
   if (!events || events.length === 0) return null;
 
   return (
-    <section className="py-24 px-4 relative z-10 border-t border-[var(--color-border-subtle)]">
+    <section className="py-12 px-4 relative z-10 border-t border-[var(--color-border-subtle)]">
       <div className="container mx-auto max-w-7xl">
         <SectionHeading
           title={<>Connect & <span className="glow-text-primary">Collaborate</span></>}

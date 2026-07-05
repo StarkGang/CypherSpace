@@ -44,7 +44,7 @@ export default function Footer() {
 
   return (
     <footer
-      className="relative z-10 mt-20"
+      className="relative z-40 mt-20"
       style={{
         background: "var(--color-bg-surface)",
         borderTop: "1px solid var(--color-border-subtle)",
@@ -87,7 +87,7 @@ export default function Footer() {
                   href={socialLinks[s.id]}
                   target="_blank"
                   rel="noreferrer"
-                  className="w-8 h-8 flex items-center justify-center rounded-lg transition-all duration-200 hover:scale-110"
+                  className="w-10 h-10 flex items-center justify-center rounded-lg transition-all duration-200 hover:scale-110"
                   style={{
                     background: "var(--color-bg-dark)",
                     border: "1px solid var(--color-border-subtle)",
@@ -117,7 +117,7 @@ export default function Footer() {
                     <li key={l.name}>
                       <Link
                         href={l.path}
-                        className="text-sm transition-colors duration-200"
+                        className="block py-1.5 text-sm transition-colors duration-200"
                         style={{ color: "var(--color-text-secondary)" }}
                         onMouseOver={e => (e.currentTarget.style.color = "#2563eb")}
                         onMouseOut={e => (e.currentTarget.style.color = "var(--color-text-secondary)")}

@@ -8,7 +8,7 @@ export default function FeaturedProject({ project }) {
   if (!project) return null;
 
   return (
-    <section className="py-24 px-4 relative z-10 border-t border-[var(--color-border-subtle)]">
+    <section className="py-12 px-4 relative z-10 border-t border-[var(--color-border-subtle)]">
       <div className="container mx-auto max-w-7xl">
         <div className="flex flex-col md:flex-row items-center gap-12 lg:gap-16">
           

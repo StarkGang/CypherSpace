@@ -7,7 +7,7 @@ export default function Sponsors({ sponsors = [] }) {
   if (!sponsors || sponsors.length === 0) return null;
 
   return (
-    <section className="py-24 px-4 w-full relative z-10">
+    <section className="py-12 px-4 w-full relative z-10">
       <div className="container mx-auto max-w-7xl">
         <SectionHeading
           title={<>Our <span style={{color: "#2563eb"}}>Sponsors</span></>}

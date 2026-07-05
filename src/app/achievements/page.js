@@ -39,7 +39,7 @@ export default function AchievementsList() {
   }, []);
 
   if (loading) return <PageWrapper pattern="grid">
-      <div className="container mx-auto max-w-7xl px-4 pt-32 pb-20">
+      <div className="container mx-auto max-w-7xl px-4 pt-8 pb-20">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {[...Array(8)].map((_, i) => <CardSkeleton key={i} />)}
         </div>

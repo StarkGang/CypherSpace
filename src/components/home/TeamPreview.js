@@ -9,7 +9,7 @@ export default function TeamPreview({ team }) {
   if (!team || team.length === 0) return null;
 
   return (
-    <section className="py-24 px-4 w-full relative z-10 border-t border-[var(--color-border-subtle)]">
+    <section className="py-12 px-4 w-full relative z-10 border-t border-[var(--color-border-subtle)]">
       <div className="container mx-auto max-w-7xl">
         
         <SectionHeading

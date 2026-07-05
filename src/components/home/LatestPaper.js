@@ -8,7 +8,7 @@ export default function LatestPaper({ paper }) {
   if (!paper) return null;
 
   return (
-    <section className="py-24 px-4 relative z-10 border-t border-[var(--color-border-subtle)]" style={{ background: "linear-gradient(to bottom, transparent, rgba(124,58,237,0.02))" }}>
+    <section className="py-12 px-4 relative z-10 border-t border-[var(--color-border-subtle)]" style={{ background: "linear-gradient(to bottom, transparent, rgba(124,58,237,0.02))" }}>
       <div className="container mx-auto max-w-7xl">
         <div className="flex flex-col md:flex-row-reverse items-center gap-12 lg:gap-16">
           

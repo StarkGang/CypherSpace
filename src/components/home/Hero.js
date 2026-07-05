@@ -177,7 +177,7 @@ function BlockFeed({ activities = [] }) {
       <div
         className="grid px-4 py-2 text-xs font-mono"
         style={{
-          gridTemplateColumns: "90px 1fr 80px 70px",
+          gridTemplateColumns: "90px 1fr 100px 70px",
           color: "var(--color-text-muted)",
           borderBottom: "1px solid var(--color-border-subtle)",
         }}
@@ -210,7 +210,7 @@ function BlockFeed({ activities = [] }) {
                 <RowWrapper
                   href={e.path || "#"}
                   className={`grid px-4 py-2.5 text-xs font-mono items-center w-full transition-colors ${e.path ? "hover:bg-[var(--color-bg-dark)] cursor-pointer group" : ""}`}
-                  style={{ gridTemplateColumns: "90px 1fr 80px 70px" }}
+                  style={{ gridTemplateColumns: "90px 1fr 100px 70px" }}
                 >
                   <span style={{ color: "#2563eb" }}>#{e.block.toLocaleString()}</span>
                   
@@ -225,20 +225,22 @@ function BlockFeed({ activities = [] }) {
 
                   <span
                     style={{
-                      color: e.type === "EVENT" ? "#4f46e5" : e.type === "PROJECT" ? "#10b981" : e.type === "PAPER" ? "#db2777" : e.type === "ACHIEVEMENT" ? "#f59e0b" : e.type === "BLOG" ? "#8b5cf6" : e.type === "TEAM" ? "#06b6d4" : "var(--color-text-secondary)",
+                      color: e.type === "EVENT" ? "#4f46e5" : e.type === "PROJECT" ? "#10b981" : e.type === "PAPER" ? "#db2777" : e.type === "ACHIEVEMENT" ? "#f59e0b" : e.type === "BLOG" ? "#8b5cf6" : e.type === "TEAM" ? "#06b6d4" : e.type === "RESOURCE" || e.type === "RESOURCES" ? "#eab308" : "var(--color-text-secondary)",
                     }}
                   >
                     {e.type}
                   </span>
                   
                   <span
-                    className="text-right flex items-center justify-end gap-1"
+                    className="text-right flex items-center justify-end relative"
                     style={{
                       color: e.rawStatus === "created" ? "#10b981" : e.rawStatus === "updated" ? "#3b82f6" : "#ef4444",
                     }}
                   >
-                    {e.rawStatus === "created" ? "✓" : e.rawStatus === "updated" ? "✎" : "✕"}
-                    {e.path && <span className="opacity-0 group-hover:opacity-100 transition-opacity ml-1" style={{ color: "#2563eb" }}>→</span>}
+                    <span className={`transform transition-transform ${e.path ? "group-hover:-translate-x-4" : ""}`}>
+                      {e.rawStatus === "created" ? "✓" : e.rawStatus === "updated" ? "✎" : "✕"}
+                    </span>
+                    {e.path && <span className="absolute right-0 opacity-0 group-hover:opacity-100 transition-opacity" style={{ color: "#2563eb" }}>→</span>}
                   </span>
                 </RowWrapper>
               </motion.div>
@@ -252,7 +254,7 @@ function BlockFeed({ activities = [] }) {
             animate={{ opacity: 1 }}
             className="grid px-4 py-2.5 text-xs font-mono items-center border-b"
             style={{
-              gridTemplateColumns: "90px 1fr 80px 70px",
+              gridTemplateColumns: "90px 1fr 100px 70px",
               borderColor: "var(--color-border-subtle)",
             }}
           >
@@ -310,7 +312,7 @@ export default function Hero({ settings, activities = [] }) {
   const heroSubtitle = settings?.hero_subtitle || "We bring together curious students who want to understand how cryptography and decentralized systems actually work — not through textbooks alone, but by building real things, solving real problems, and contributing to the open-source ecosystem that matters.";
 
   return (
-    <section className="relative pt-8 pb-6 md:pt-12 md:pb-8 overflow-hidden">
+    <section className="relative pt-2 pb-6 md:pt-4 md:pb-8 overflow-hidden">
 
       <div className="container mx-auto max-w-7xl px-4">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center min-h-[60vh]">

@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import AdminLayout from "../../../components/admin/AdminLayout";
 import Input from "../../../components/ui/Input";
 import Button from "../../../components/ui/Button";
-import { FiSave } from "react-icons/fi";
+import { FiSave, FiCheck } from "react-icons/fi";
 import { api } from "../../../lib/api";
 
 export default function ProfilePage() {
@@ -125,10 +125,11 @@ export default function ProfilePage() {
             <Button
               type="submit"
               variant="primary"
-              icon={<FiSave />}
+              icon={success ? <FiCheck /> : <FiSave />}
               disabled={saving}
+              className={success ? "!bg-green-500 !text-white transition-colors duration-300" : "transition-colors duration-300"}
             >
-              {saving ? "Updating..." : "Update Password"}
+              {saving ? "Updating..." : success ? "Updated!" : "Update Password"}
             </Button>
           </div>
         </form>

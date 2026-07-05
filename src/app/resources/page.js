@@ -28,7 +28,7 @@ export default function ResourcesList() {
 
   if (loading) return (
     <PageWrapper>
-      <div className="container mx-auto max-w-7xl px-4 pt-32 pb-20">
+      <div className="container mx-auto max-w-7xl px-4 pt-8 pb-20">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {[...Array(8)].map((_, i) => <CardSkeleton key={i} />)}
         </div>
@@ -76,7 +76,7 @@ export default function ResourcesList() {
 
   return (
     <PageWrapper>
-      <div className="container mx-auto max-w-5xl px-4 relative z-10 pt-24 pb-20">
+      <div className="container mx-auto max-w-5xl px-4 relative z-10 pt-8 pb-20">
         
         <div className="mb-16 text-left">
           <div className="inline-flex items-center gap-2 text-[var(--color-brand-primary)] text-xs font-mono font-semibold uppercase tracking-wider mb-6">
