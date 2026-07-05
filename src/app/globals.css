@@ -1,0 +1,205 @@
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+@layer base {
+  :root {
+    /* Clean Academic Light Theme */
+    --color-bg-deep: #F8FAFC;
+    --color-bg-dark: #F1F5F9;
+    --color-bg-surface: #FFFFFF;
+    --color-text-primary: #0F172A;
+    --color-text-secondary: #475569;
+    --color-text-muted: #64748B;
+    
+    --color-border-subtle: #E2E8F0;
+    --color-border-glow: #CBD5E1;
+    
+    --color-glass-bg: rgba(255, 255, 255, 0.95);
+    --color-glass-hover: rgba(0, 0, 0, 0.02);
+    --color-glass-border: #E2E8F0;
+    
+    --color-neon-glow: transparent;
+    --color-blue-glow: transparent;
+
+    /* Badge / Tag colors */
+    --color-sticker-pink: #64748b;
+    --color-sticker-lime: #10b981;
+    --color-sticker-yellow: #f59e0b;
+    --color-sticker-blue: #3b82f6;
+  }
+
+  .dark {
+    --color-bg-deep: #0a0e17;
+    --color-bg-dark: #0f1420;
+    --color-bg-surface: #161b26;
+    --color-text-primary: #f1f5f9;
+    --color-text-secondary: #94a3b8;
+    --color-text-muted: #64748b;
+    
+    --color-border-subtle: rgba(148, 163, 184, 0.12);
+    --color-border-glow: rgba(37, 99, 235, 0.3);
+    
+    --color-glass-bg: rgba(22, 27, 38, 0.95);
+    --color-glass-hover: rgba(148, 163, 184, 0.08);
+    --color-glass-border: rgba(148, 163, 184, 0.12);
+    
+    --color-neon-glow: rgba(37, 99, 235, 0.15);
+    --color-blue-glow: rgba(37, 99, 235, 0.2);
+  }
+
+  body {
+    background-color: var(--color-bg-deep);
+    color: var(--color-text-primary);
+    font-family: var(--font-inter, sans-serif);
+    overflow-x: hidden;
+  }
+}
+
+@theme {
+  --color-brand-primary: #2563EB;
+  --color-brand-secondary: #4F46E5;
+  --color-brand-tertiary: #0F172A;
+
+  --font-family-display: var(--font-space-grotesk), sans-serif;
+  --font-family-mono: var(--font-jetbrains-mono), monospace;
+  --font-family-body: var(--font-inter), sans-serif;
+}
+
+/* ── Glass / Chain Card ─────────────────────────── */
+.chain-card {
+  background: var(--color-glass-bg);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid var(--color-glass-border);
+  border-radius: 12px;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+  transition: all 0.2s ease;
+}
+.chain-card:hover {
+  border-color: var(--color-border-glow);
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.05), 0 4px 6px -4px rgb(0 0 0 / 0.05);
+  transform: translateY(-2px);
+}
+
+/* Keep glass-card as alias */
+.glass-card {
+  background: var(--color-glass-bg);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid var(--color-glass-border);
+  border-radius: 12px;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05);
+  transition: all 0.2s ease;
+}
+.glass-card:hover {
+  border-color: var(--color-border-glow);
+}
+
+/* ── Neo-brutalist compat aliases (restyled) ─────── */
+.border-brutal   { border-width: 1px; border-color: var(--color-glass-border); }
+.border-b-brutal { border-bottom: 1px solid var(--color-glass-border); }
+.border-t-brutal { border-top: 1px solid var(--color-glass-border); }
+.border-r-brutal { border-right: 1px solid var(--color-glass-border); }
+.border-l-brutal { border-left: 1px solid var(--color-glass-border); }
+.shadow-brutal   { box-shadow: 0 0 20px rgba(0, 212, 170, 0.06); }
+
+/* ── Accent Text ─────────────────────────────── */
+.glow-text {
+  color: var(--color-text-primary);
+}
+.glow-text-primary,
+.glow-text-teal {
+  color: var(--color-text-primary);
+}
+.glow-text-blue {
+  color: var(--color-text-primary);
+}
+
+/* ── Grid Background ────────────────────────────── */
+.light-grid-bg,
+.hex-grid-bg {
+  background-color: var(--color-bg-deep);
+}
+
+/* ── Glow Orbs (Removed for clean aesthetic) ─── */
+.glow-orb { display: none; }
+.glow-orb-purple { display: none; }
+.glow-orb-blue   { display: none; }
+.glow-orb-pink   { display: none; }
+
+/* ── Keyframes ──────────────────────────────────── */
+@keyframes pulse {
+  0%   { transform: scale(1)   translate(0, 0);    opacity: 0.1; }
+  50%  { transform: scale(1.2) translate(5%, 5%);  opacity: 0.22; }
+  100% { transform: scale(0.9) translate(-5%, -5%); opacity: 0.1; }
+}
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 10px var(--color-border-subtle); }
+  50%       { box-shadow: 0 0 20px var(--color-border-subtle); }
+}
+@keyframes shimmer {
+  100% { transform: translateX(100%); }
+}
+@keyframes ticker {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-12px); }
+}
+@keyframes spin-slow {
+  0%   { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+@keyframes chain-build {
+  0%   { opacity: 0; transform: scale(0.8) translateX(-10px); }
+  100% { opacity: 1; transform: scale(1)   translateX(0); }
+}
+@keyframes neon-flicker {
+  0%, 100% { opacity: 1; }
+  93%       { opacity: 1; }
+  95%       { opacity: 0.4; }
+  97%       { opacity: 1; }
+  99%       { opacity: 0.6; }
+}
+
+/* ── Utility Animations ─────────────────────────── */
+.animate-ticker    { animation: ticker linear infinite; will-change: transform; }
+.animate-float     { animation: float 6s ease-in-out infinite; }
+.animate-spin-slow { animation: spin-slow 10s linear infinite; }
+.animate-glow      { animation: glow-pulse 3s ease-in-out infinite; }
+.animate-flicker   { animation: neon-flicker 8s infinite; }
+
+/* ── Text utilities ─────────────────────────────── */
+@utility text-hero {
+  font-size: clamp(2.8rem, 7vw, 5.5rem);
+  line-height: 1.05;
+  font-family: var(--font-family-display);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+}
+@utility text-section {
+  font-size: clamp(1.8rem, 4vw, 3.5rem);
+  line-height: 1.1;
+  font-family: var(--font-family-display);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+/* ── Form controls ──────────────────────────────── */
+select, option {
+  background-color: var(--color-bg-surface);
+  color: var(--color-text-primary);
+}
+
+/* ── Premium IDE (admin) ────────────────────────── */
+.premium-ide {
+  background: #030812 !important;
+  border-color: rgba(0,212,170,0.15) !important;
+  color: #e2e8f0 !important;
+}
+.premium-ide-header {
+  background: #020810 !important;
+  border-color: rgba(0,212,170,0.1) !important;
+}
