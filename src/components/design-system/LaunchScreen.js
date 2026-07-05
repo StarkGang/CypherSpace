@@ -200,11 +200,6 @@ export default function LaunchScreen({ launchDate, launchAction = "hold", onUnlo
             <h1 className="font-display font-bold text-3xl md:text-5xl uppercase tracking-[0.3em] text-white">
               CypherSpace
             </h1>
-            <div className="mt-8 flex items-center gap-6">
-              <div className="h-px w-16 bg-slate-800"></div>
-              <img src="/nssce-logo.webp" alt="NSS College of Engineering" className="h-10 w-auto object-contain grayscale opacity-50" />
-              <div className="h-px w-16 bg-slate-800"></div>
-            </div>
           </div>
 
           <div className="min-h-[200px] flex flex-col items-center justify-center">

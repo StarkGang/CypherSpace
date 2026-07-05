@@ -76,14 +76,6 @@ export default function Navbar() {
               </span>
             </div>
             
-            <div className="h-6 w-px bg-slate-200 dark:bg-slate-700 mx-2"></div>
-            
-            <img 
-              src="/nssce-logo.webp" 
-              alt="NSSCE" 
-              className="h-8 w-auto object-contain grayscale opacity-80 hover:grayscale-0 hover:opacity-100 transition-all duration-300" 
-              title="NSS College of Engineering" 
-            />
           </Link>
 
           {/* Right Actions */}

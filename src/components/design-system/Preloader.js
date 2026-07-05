@@ -88,7 +88,7 @@ export default function Preloader() {
               transition={{ delay: 1, duration: 2.2, ease: "easeOut" }}
               className="font-display text-lg md:text-xl font-bold uppercase text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.4)] ml-[0.35em]"
             >
-              Cypher Space <span style={{ color: "#3b82f6" }}>@</span> NSSCE
+              Cypher Space <span style={{ color: "#3b82f6" }}></span>
             </motion.div>
             
             

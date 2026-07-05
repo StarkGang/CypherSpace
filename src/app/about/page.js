@@ -46,7 +46,7 @@ export default function AboutPage() {
 
         <div className="relative mb-16">
           <div className="absolute -top-6 -right-6 z-10 hidden md:block">
-            <Sticker color="lime" size="lg" rotate={15}>CYPHER SPACE @ NSSCE</Sticker>
+            <Sticker color="lime" size="lg" rotate={15}>CYPHER SPACE</Sticker>
           </div>
 
           <Paper variant="stacked" rotate={1} className="p-8 md:p-16 relative">

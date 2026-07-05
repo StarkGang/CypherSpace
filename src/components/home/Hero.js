@@ -364,12 +364,6 @@ export default function Hero({ settings, activities = [] }) {
                   <span style={{ color: "var(--color-text-primary)" }}>
                     {heroTitle}
                   </span>
-                  <div className="flex items-center gap-4 mt-3 pl-2">
-                    <img src="/nssce-logo.webp" alt="NSSCE Crest" className="h-[0.8em] w-auto object-contain drop-shadow-sm grayscale hover:grayscale-0 transition-all duration-300" />
-                    <span style={{ color: "#2563eb", fontSize: "0.85em", letterSpacing: "0.02em" }}>
-                      NSSCE
-                    </span>
-                  </div>
                 </div>
               </motion.h1>
 

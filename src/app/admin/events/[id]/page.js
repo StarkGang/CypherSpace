@@ -31,7 +31,8 @@ export default function AdminEventForm() {
     banner: "",
     gallery: [""],
     tags: "",
-    featured: false
+    featured: false,
+    blast_from_past: false
   });
 
   useEffect(() => {
@@ -252,18 +253,34 @@ export default function AdminEventForm() {
                 </select>
               </div>
 
-              <div className="flex items-center gap-3">
-                <input
-                  type="checkbox"
-                  id="featured"
-                  name="featured"
-                  checked={formData.featured}
-                  onChange={handleChange}
-                  className="w-5 h-5 border-2 border-[var(--color-ink-black)] accent-[var(--color-sticker-pink)]"
-                />
-                <label htmlFor="featured" className="font-display font-bold uppercase tracking-wider text-sm cursor-pointer">
-                  Featured Event
-                </label>
+              <div className="flex flex-col gap-4">
+                <div className="flex items-center gap-3">
+                  <input
+                    type="checkbox"
+                    id="featured"
+                    name="featured"
+                    checked={formData.featured}
+                    onChange={handleChange}
+                    className="w-5 h-5 border-2 border-[var(--color-ink-black)] accent-[var(--color-sticker-pink)]"
+                  />
+                  <label htmlFor="featured" className="font-display font-bold uppercase tracking-wider text-sm cursor-pointer">
+                    Featured Event
+                  </label>
+                </div>
+                
+                <div className="flex items-center gap-3">
+                  <input
+                    type="checkbox"
+                    id="blast_from_past"
+                    name="blast_from_past"
+                    checked={formData.blast_from_past}
+                    onChange={handleChange}
+                    className="w-5 h-5 border-2 border-[var(--color-ink-black)] accent-[var(--color-sticker-lime)]"
+                  />
+                  <label htmlFor="blast_from_past" className="font-display font-bold uppercase tracking-wider text-sm cursor-pointer">
+                    Blast From The Past
+                  </label>
+                </div>
               </div>
             </Paper>
           </div>

@@ -39,7 +39,9 @@ export const getHomepageData = unstable_cache(
       latest_paper: null,
       recent_achievement: null,
       activity_feed: [],
-      team_preview: []
+      team_preview: [],
+      featured_event: null,
+      blast_from_past_events: []
     };
 
     if (sections.show_stats !== false) {
@@ -62,6 +64,22 @@ export const getHomepageData = unstable_cache(
         fp = await db.collection('projects').findOne({ featured: true }, { sort: { created_at: -1 } });
       }
       data.featured_project = fp ? entityToDict(fp) : null;
+    }
+
+    if (sections.show_featured_event !== false) {
+      let fe = null;
+      if (highlights.featured_event_id) {
+        try { fe = await db.collection('events').findOne({ _id: new ObjectId(highlights.featured_event_id) }); } catch(e) {}
+      }
+      if (!fe) {
+        fe = await db.collection('events').findOne({ featured: true, blast_from_past: { $ne: true } }, { sort: { date: -1 } });
+      }
+      data.featured_event = fe ? entityToDict(fe) : null;
+    }
+
+    if (sections.show_blast_from_past !== false) {
+      const bfpList = await db.collection('events').find({ blast_from_past: true }).sort({ date: -1 }).toArray();
+      data.blast_from_past_events = bfpList.map(entityToDict);
     }
 
     if (sections.show_events !== false) {
@@ -118,11 +136,13 @@ export const getHomepageData = unstable_cache(
         latest_paper: null,
         recent_achievement: null,
         activity_feed: [],
-        team_preview: []
+        team_preview: [],
+        featured_event: null,
+        blast_from_past_events: []
       };
     }
   },
-  ['homepage-data'],
+  ['homepage-data-v4'],
   { tags: ['homepage', 'settings', 'projects', 'events', 'papers', 'achievements', 'activity', 'team'], revalidate: 3600 }
 );
 

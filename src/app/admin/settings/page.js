@@ -49,7 +49,7 @@ export default function AdminSettings() {
 
   const [formData, setFormData] = useState({
     club_name: "Cypher Space",
-    club_subtitle: "Blockchain Community, NSSCE",
+    club_subtitle: "Blockchain & Web3 Community, NSSCE",
     hero_title: "CYPHER SPACE",
     hero_highlight: "Web3, Cryptography & Decentralized Systems",
     hero_subtitle:
@@ -73,6 +73,7 @@ export default function AdminSettings() {
     homepage_sections: {
       show_stats: true,
       show_featured_project: true,
+      show_featured_event: true,
       show_events: true,
       show_latest_paper: true,
       show_recent_achievement: true,
@@ -80,10 +81,12 @@ export default function AdminSettings() {
       show_team_preview: true,
       show_neon_effect: true,
       show_sponsors: true,
+      show_blast_from_past: true,
       section_order: [
-        "college",
         "stats",
         "featured_project",
+        "featured_event",
+        "blast_from_past",
         "events",
         "latest_paper",
         "recent_achievement",
@@ -111,7 +114,27 @@ export default function AdminSettings() {
           homepage_sections: {
             ...prev.homepage_sections,
             ...(data?.homepage_sections || {}),
-            section_order: (data?.homepage_sections?.section_order || prev.homepage_sections.section_order).filter(id => id !== 'activity_feed'),
+            section_order: (() => {
+              let order = (data?.homepage_sections?.section_order || prev.homepage_sections.section_order)
+                .filter(id => id !== 'activity_feed' && id !== 'college');
+              if (!order.includes('featured_event')) {
+                const fpIndex = order.indexOf('featured_project');
+                if (fpIndex !== -1) {
+                  order.splice(fpIndex + 1, 0, 'featured_event');
+                } else {
+                  order.unshift('featured_event');
+                }
+              }
+              if (!order.includes('blast_from_past')) {
+                const feIndex = order.indexOf('featured_event');
+                if (feIndex !== -1) {
+                  order.splice(feIndex + 1, 0, 'blast_from_past');
+                } else {
+                  order.push('blast_from_past');
+                }
+              }
+              return order;
+            })(),
           },
           club_stats: {
             ...prev.club_stats,
@@ -195,9 +218,10 @@ export default function AdminSettings() {
   };
 
   const SECTION_LABELS = {
-    college: "College Section",
     stats: "Club Stats",
     featured_project: "Featured Project",
+    featured_event: "Featured Event",
+    blast_from_past: "Blast from the Past",
     events: "Events",
     latest_paper: "Latest Paper",
     recent_achievement: "Recent Achievement",
@@ -497,6 +521,30 @@ export default function AdminSettings() {
               }
               label="Featured Project"
               description="Highlighted project showcase"
+            />
+            <ToggleSwitch
+              checked={formData.homepage_sections.show_featured_event !== false}
+              onChange={(val) =>
+                handleNestedChange(
+                  "homepage_sections",
+                  "show_featured_event",
+                  val
+                )
+              }
+              label="Featured Event"
+              description="Highlighted upcoming/recent event"
+            />
+            <ToggleSwitch
+              checked={formData.homepage_sections.show_blast_from_past !== false}
+              onChange={(val) =>
+                handleNestedChange(
+                  "homepage_sections",
+                  "show_blast_from_past",
+                  val
+                )
+              }
+              label="Blast From The Past"
+              description="Older memorable events in a grid"
             />
             <ToggleSwitch
               checked={formData.homepage_sections.show_events}

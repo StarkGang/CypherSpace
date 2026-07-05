@@ -19,7 +19,7 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata = {
   title: {
-    default: "Cypher Space - NSSCE",
+    default: "Cypher Space",
     template: "%s | Cypher Space",
   },
   description: "Cypher Space brings together students passionate about blockchain to learn, build, research, and share knowledge at NSSCE.",
@@ -34,13 +34,13 @@ export const metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    title: "Cypher Space - NSSCE",
+    title: "Cypher Space",
     description: "Cypher Space brings together students passionate about blockchain to learn, build, research, and share knowledge at NSSCE.",
     siteName: "Cypher Space",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Cypher Space - NSSCE",
+    title: "Cypher Space",
     description: "Cypher Space brings together students passionate about blockchain to learn, build, research, and share knowledge at NSSCE.",
   },
   robots: {

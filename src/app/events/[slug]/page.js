@@ -158,8 +158,22 @@ export default function EventDetail() {
                         </h2>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                           {event.gallery.map((imgUrl, i) => (
-                            <div key={i} className="aspect-[4/3] border-brutal overflow-hidden">
-                              <img src={imgUrl} alt={`${event.title} gallery ${i+1}`} className="w-full h-full object-cover hover:scale-105 transition-transform" />
+                            <div key={i} className="aspect-[4/3] border-brutal overflow-hidden relative bg-gray-100 dark:bg-gray-800">
+                              <img 
+                                src={imgUrl} 
+                                alt={`${event.title} gallery ${i+1}`} 
+                                className="w-full h-full object-cover hover:scale-105 transition-transform" 
+                                onError={(e) => {
+                                  e.target.style.display = 'none';
+                                  e.target.nextSibling.style.display = 'flex';
+                                }}
+                              />
+                              <div className="hidden w-full h-full flex-col items-center justify-center text-gray-400">
+                                <FiExternalLink className="w-8 h-8 mb-2" />
+                                <a href={imgUrl} target="_blank" rel="noopener noreferrer" className="text-xs font-mono font-bold uppercase hover:underline">
+                                  External Link
+                                </a>
+                              </div>
                             </div>
                           ))}
                         </div>

@@ -10,7 +10,7 @@ export async function GET(request) {
     if (!settings) {
       const defaultSettings = {
         club_name: 'Cypher Space',
-        club_subtitle: 'Blockchain Community, NSSCE',
+        club_subtitle: 'Blockchain & Web3 Community, NSSCE',
         created_at: new Date(),
         updated_at: new Date()
       };
