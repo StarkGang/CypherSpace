@@ -7,7 +7,50 @@ import Paper from "../../../components/design-system/Paper";
 import Sticker from "../../../components/design-system/Sticker";
 import { PageSkeleton, CardSkeleton } from "../../../components/ui/Skeleton";
 import Button from "../../../components/ui/Button";
-import { FiCalendar, FiMapPin, FiClock, FiExternalLink } from "react-icons/fi";
+import { FiCalendar, FiMapPin, FiClock, FiExternalLink, FiFileText, FiGrid } from "react-icons/fi";
+import { FaGoogleDrive, FaYoutube, FaGithub, FaFigma, FaLinkedin, FaInstagram, FaMedium, FaTwitter } from "react-icons/fa";
+
+const getLinkMeta = (url) => {
+  try {
+    const parsed = new URL(url);
+    const host = parsed.hostname.toLowerCase();
+    
+    if (host.includes('youtube.com') || host.includes('youtu.be')) {
+      return { icon: FaYoutube, color: 'bg-[#FF0000]', text: 'text-white', label: 'YouTube Video' };
+    }
+    if (host.includes('drive.google.com')) {
+      return { icon: FaGoogleDrive, color: 'bg-[#0F9D58]', text: 'text-white', label: 'Google Drive' };
+    }
+    if (host.includes('github.com')) {
+      return { icon: FaGithub, color: 'bg-[#181717]', text: 'text-white', label: 'GitHub Repository' };
+    }
+    if (host.includes('figma.com')) {
+      return { icon: FaFigma, color: 'bg-[#F24E1E]', text: 'text-white', label: 'Figma Design' };
+    }
+    if (host.includes('linkedin.com')) {
+      return { icon: FaLinkedin, color: 'bg-[#0A66C2]', text: 'text-white', label: 'LinkedIn' };
+    }
+    if (host.includes('instagram.com')) {
+      return { icon: FaInstagram, color: 'bg-[#E4405F]', text: 'text-white', label: 'Instagram' };
+    }
+    if (host.includes('medium.com')) {
+      return { icon: FaMedium, color: 'bg-[#000000]', text: 'text-white', label: 'Medium Article' };
+    }
+    if (host.includes('twitter.com') || host.includes('x.com')) {
+      return { icon: FaTwitter, color: 'bg-[#1DA1F2]', text: 'text-white', label: 'Twitter / X' };
+    }
+    if (parsed.pathname.endsWith('.pdf')) {
+      return { icon: FiFileText, color: 'bg-[#FF5722]', text: 'text-white', label: 'PDF Document' };
+    }
+    if (parsed.pathname.endsWith('.xlsx') || parsed.pathname.endsWith('.csv')) {
+      return { icon: FiGrid, color: 'bg-[#21A366]', text: 'text-white', label: 'Spreadsheet' };
+    }
+    
+    return { icon: FiExternalLink, color: 'bg-[var(--color-sticker-pink)]', text: 'text-black', label: host.replace(/^www\./, '') };
+  } catch(e) {
+    return { icon: FiExternalLink, color: 'bg-gray-200', text: 'text-black', label: 'External Link' };
+  }
+};
 import { api } from "../../../lib/api";
 
 export default function EventDetail() {
@@ -168,11 +211,22 @@ export default function EventDetail() {
                                   e.target.nextSibling.style.display = 'flex';
                                 }}
                               />
-                              <div className="hidden w-full h-full flex-col items-center justify-center text-gray-400">
-                                <FiExternalLink className="w-8 h-8 mb-2" />
-                                <a href={imgUrl} target="_blank" rel="noopener noreferrer" className="text-xs font-mono font-bold uppercase hover:underline">
-                                  External Link
-                                </a>
+                              <div className="hidden w-full h-full flex-col items-center justify-center bg-[var(--color-paper-cream)] p-4 text-center border-brutal border-t-0 border-l-0 border-r-0 border-b-0 h-full relative">
+                                {(() => {
+                                  const meta = getLinkMeta(imgUrl);
+                                  const Icon = meta.icon;
+                                  return (
+                                    <>
+                                      <div className={`p-4 rounded-full mb-3 border-2 border-black ${meta.color} ${meta.text} shadow-[2px_2px_0px_#000]`}>
+                                        <Icon className="w-8 h-8" />
+                                      </div>
+                                      <h3 className="font-display font-bold uppercase text-black text-sm mb-3 line-clamp-1">{meta.label}</h3>
+                                      <a href={imgUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-[10px] font-mono font-bold uppercase bg-black text-white px-4 py-2 hover:bg-gray-800 transition-colors shadow-[2px_2px_0px_var(--color-sticker-pink)]">
+                                        Open Link <FiExternalLink />
+                                      </a>
+                                    </>
+                                  );
+                                })()}
                               </div>
                             </div>
                           ))}
