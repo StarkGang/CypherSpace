@@ -12,7 +12,7 @@ export default function BlastFromPast({ events }) {
     <section className="py-12 px-4 relative z-10 border-t border-[var(--color-border-subtle)]">
       <div className="container mx-auto max-w-7xl">
         <SectionHeading
-          title="Blast from the Past"
+          title="Past Events"
           subtitle="A look back at some of our most memorable events."
           metadata="ARCHIVE"
           align="left"
@@ -52,7 +52,7 @@ export default function BlastFromPast({ events }) {
                         No Media
                       </div>
                     )}
-                    
+
                     <div
                       className="absolute top-2 right-2 px-2 py-1 rounded bg-black/60 backdrop-blur-sm border border-white/10 text-white text-[10px] font-mono uppercase tracking-wider"
                     >
@@ -92,7 +92,8 @@ export default function BlastFromPast({ events }) {
           ))}
         </div>
       </div>
-      <style dangerouslySetInnerHTML={{__html: `
+      <style dangerouslySetInnerHTML={{
+        __html: `
         .hide-scrollbar::-webkit-scrollbar {
           display: none;
         }

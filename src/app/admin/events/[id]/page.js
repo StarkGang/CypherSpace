@@ -39,7 +39,7 @@ export default function AdminEventForm() {
 
   useEffect(() => {
     if (isNew) return;
-    
+
     const fetchEvent = async () => {
       try {
         const res = await api.get(`/events/${eventId}`);
@@ -119,7 +119,7 @@ export default function AdminEventForm() {
       </div>
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-8 pb-32">
-        
+
         {error && (
           <div className="bg-red-100 border-2 border-red-500 text-red-700 px-4 py-3 font-mono text-sm font-bold uppercase tracking-wider">
             {error}
@@ -127,11 +127,11 @@ export default function AdminEventForm() {
         )}
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          
+
           <div className="lg:col-span-2 flex flex-col gap-8">
             <Paper variant="default" className="p-6 md:p-8" rotate={0} shadowSize="sm">
               <h2 className="font-display font-black text-2xl uppercase mb-6 border-b-2 border-[var(--color-ink-black)] pb-2">Event Info</h2>
-              
+
               <Input
                 label="Event Title"
                 name="title"
@@ -213,7 +213,7 @@ export default function AdminEventForm() {
 
             <Paper variant="default" className="p-6 md:p-8" rotate={0} shadowSize="sm">
               <h2 className="font-display font-black text-2xl uppercase mb-6 border-b-2 border-[var(--color-ink-black)] pb-2">Media URLs</h2>
-              
+
               <Input
                 label="Banner Image URL"
                 name="banner"
@@ -255,7 +255,7 @@ export default function AdminEventForm() {
           <div className="lg:col-span-1 flex flex-col gap-8">
             <Paper variant="default" className="p-6" rotate={0} shadowSize="sm">
               <h2 className="font-display font-black text-2xl uppercase mb-6 border-b-2 border-[var(--color-ink-black)] pb-2">Status</h2>
-              
+
               <div className="mb-6">
                 <label className="mb-2 font-display font-bold uppercase tracking-wider text-sm flex items-center">
                   Event Status
@@ -286,7 +286,7 @@ export default function AdminEventForm() {
                     Featured Event
                   </label>
                 </div>
-                
+
                 <div className="flex items-center gap-3">
                   <input
                     type="checkbox"
@@ -297,7 +297,7 @@ export default function AdminEventForm() {
                     className="w-5 h-5 border-2 border-[var(--color-ink-black)] accent-[var(--color-sticker-lime)]"
                   />
                   <label htmlFor="blast_from_past" className="font-display font-bold uppercase tracking-wider text-sm cursor-pointer">
-                    Blast From The Past
+                    Past Events
                   </label>
                 </div>
               </div>

@@ -26,14 +26,12 @@ function ToggleSwitch({ checked, onChange, label, description }) {
         )}
       </div>
       <div
-        className={`relative w-11 h-6 rounded-full transition-colors duration-200 flex-shrink-0 ${
-          checked ? "bg-blue-600 dark:bg-blue-500" : "bg-slate-300 dark:bg-slate-700"
-        }`}
+        className={`relative w-11 h-6 rounded-full transition-colors duration-200 flex-shrink-0 ${checked ? "bg-blue-600 dark:bg-blue-500" : "bg-slate-300 dark:bg-slate-700"
+          }`}
       >
         <div
-          className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full transition-transform duration-200 shadow ${
-            checked ? "translate-x-5" : "translate-x-0"
-          }`}
+          className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full transition-transform duration-200 shadow ${checked ? "translate-x-5" : "translate-x-0"
+            }`}
         />
       </div>
     </div>
@@ -96,7 +94,7 @@ export default function AdminSettings() {
     },
     enable_launch_mode: false,
     launch_date: "",
-    launch_action: "hold", 
+    launch_action: "hold",
   });
 
   useEffect(() => {
@@ -221,7 +219,7 @@ export default function AdminSettings() {
     stats: "Club Stats",
     featured_project: "Featured Project",
     featured_event: "Featured Event",
-    blast_from_past: "Blast from the Past",
+    blast_from_past: "Past Events",
     events: "Events",
     latest_paper: "Latest Paper",
     recent_achievement: "Recent Achievement",
@@ -286,7 +284,7 @@ export default function AdminSettings() {
           <h2 className="font-semibold text-xl mb-6 border-b border-slate-200 dark:border-[#30363d] pb-3">
             Launch Mode Settings
           </h2>
-          
+
           <div className="mb-6">
             <ToggleSwitch
               label="Enable Countdown Launch Mode"
@@ -305,7 +303,7 @@ export default function AdminSettings() {
               onChange={handleChange}
               helperText="The exact time the countdown reaches zero."
             />
-            
+
             <div className="flex flex-col mb-6">
               <label className="font-semibold text-sm mb-2 text-slate-800 dark:text-slate-200">
                 Unlock Action Type
@@ -543,7 +541,7 @@ export default function AdminSettings() {
                   val
                 )
               }
-              label="Blast From The Past"
+              label="Past Events"
               description="Older memorable events in a grid"
             />
             <ToggleSwitch

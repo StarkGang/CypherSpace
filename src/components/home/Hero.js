@@ -3,6 +3,106 @@ import Link from "next/link";
 import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FiArrowRight, FiGithub, FiLink2 } from "react-icons/fi";
+import { FaBitcoin, FaEthereum } from "react-icons/fa";
+import { SiCardano, SiTether, SiSolana, SiPolkadot, SiBinance } from "react-icons/si";
+
+const FloatingBlocksLeft = () => {
+  return (
+    <div className="absolute left-0 top-0 bottom-0 w-[15vw] max-w-[250px] hidden lg:block overflow-hidden pointer-events-none z-0">
+      <div className="relative w-full h-full opacity-30">
+        {[...Array(30)].map((_, i) => (
+          <div 
+            key={i} 
+            className="absolute rounded-md bg-white/10"
+            style={{
+              width: "40px",
+              height: "40px",
+              left: `${(i % 4) * 50}px`,
+              top: `${Math.floor(i / 4) * 50 + (i % 3) * 20}px`,
+              opacity: Math.random() > 0.5 ? 0.7 : 0,
+            }}
+          />
+        ))}
+
+        <motion.div 
+          animate={{ y: [0, -10, 0] }} 
+          transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
+          className="absolute rounded-lg flex items-center justify-center text-white"
+          style={{ width: "40px", height: "40px", left: "60px", top: "100px", background: "#3b82f6" }}
+        >
+          <SiCardano size={24} />
+        </motion.div>
+
+        <motion.div 
+          animate={{ y: [0, 15, 0] }} 
+          transition={{ repeat: Infinity, duration: 5, ease: "easeInOut", delay: 1 }}
+          className="absolute rounded-lg flex items-center justify-center text-white"
+          style={{ width: "40px", height: "40px", left: "120px", top: "300px", background: "#10b981" }}
+        >
+          <FaEthereum size={24} />
+        </motion.div>
+        
+        <motion.div 
+          animate={{ y: [0, 10, 0] }} 
+          transition={{ repeat: Infinity, duration: 6, ease: "easeInOut", delay: 0.5 }}
+          className="absolute rounded-lg flex items-center justify-center text-white"
+          style={{ width: "40px", height: "40px", left: "40px", top: "500px", background: "#f59e0b" }}
+        >
+          <FaBitcoin size={24} />
+        </motion.div>
+      </div>
+    </div>
+  );
+};
+
+const FloatingBlocksRight = () => {
+  return (
+    <div className="absolute right-0 top-0 bottom-0 w-[15vw] max-w-[250px] hidden lg:block overflow-hidden pointer-events-none z-0">
+      <div className="relative w-full h-full opacity-30">
+        {[...Array(30)].map((_, i) => (
+          <div 
+            key={i} 
+            className="absolute rounded-md bg-white/10"
+            style={{
+              width: "40px",
+              height: "40px",
+              right: `${(i % 4) * 50}px`,
+              top: `${Math.floor(i / 4) * 50 + (i % 2) * 30}px`,
+              opacity: Math.random() > 0.5 ? 0.7 : 0,
+            }}
+          />
+        ))}
+
+        <motion.div 
+          animate={{ y: [0, 12, 0] }} 
+          transition={{ repeat: Infinity, duration: 5, ease: "easeInOut" }}
+          className="absolute rounded-lg flex items-center justify-center text-white"
+          style={{ width: "40px", height: "40px", right: "80px", top: "150px", background: "#14b8a6" }}
+        >
+          <SiTether size={24} />
+        </motion.div>
+
+        <motion.div 
+          animate={{ y: [0, -12, 0] }} 
+          transition={{ repeat: Infinity, duration: 4.5, ease: "easeInOut", delay: 2 }}
+          className="absolute rounded-lg flex items-center justify-center text-white"
+          style={{ width: "40px", height: "40px", right: "120px", top: "350px", background: "#f3ba2f" }}
+        >
+          <SiBinance size={24} />
+        </motion.div>
+
+        <motion.div 
+          animate={{ y: [0, 10, 0] }} 
+          transition={{ repeat: Infinity, duration: 4, ease: "easeInOut", delay: 2 }}
+          className="absolute rounded-lg flex items-center justify-center text-white"
+          style={{ width: "40px", height: "40px", right: "60px", top: "550px", background: "#0ea5e9" }}
+        >
+          <SiSolana size={24} />
+        </motion.div>
+      </div>
+    </div>
+  );
+};
 
 
 const CONCEPTS = [
@@ -314,11 +414,13 @@ export default function Hero({ settings, activities = [] }) {
   const heroSubtitle = settings?.hero_subtitle || "We bring together curious students who want to understand how cryptography and decentralized systems actually work — not through textbooks alone, but by building real things, solving real problems, and contributing to the open-source ecosystem that matters.";
 
   return (
-    <section className="relative pt-2 pb-6 md:pt-4 md:pb-8 overflow-hidden">
+    <section className="relative pt-2 pb-6 md:pt-12 md:pb-16 overflow-hidden">
+      
+      <FloatingBlocksLeft />
+      <FloatingBlocksRight />
 
-      <div className="container mx-auto max-w-7xl px-4">
+      <div className="container relative z-10 mx-auto max-w-7xl px-4">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center min-h-[60vh]">
-
           
           <motion.div
             initial={{ opacity: 0, x: -30 }}
@@ -428,7 +530,7 @@ export default function Hero({ settings, activities = [] }) {
             initial={{ opacity: 0, x: 30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.7, delay: 0.3, ease: "easeOut" }}
-            className="hidden lg:block"
+            className="hidden lg:block relative z-10"
           >
             <BlockFeed activities={activities} />
           </motion.div>
@@ -437,3 +539,4 @@ export default function Hero({ settings, activities = [] }) {
     </section>
   );
 }
+
