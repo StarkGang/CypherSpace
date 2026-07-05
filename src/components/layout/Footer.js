@@ -138,7 +138,7 @@ export default function Footer() {
           <p>© {year} CypherSpace</p>
           <p>
             Built with{" "}
-            <span style={{ color: "#2563eb" }}>⛓</span> by FringeLabs
+            <span style={{ color: "#2563eb" }}>⛓</span> by <a href="https://github.com/fringelabs" target="_blank" rel="noopener noreferrer" className="hover:text-[#2563eb] transition-colors">FringeLabs</a>
           </p>
         </div>
       </div>

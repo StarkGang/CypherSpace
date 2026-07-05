@@ -48,10 +48,18 @@ export default function UpcomingEvents({ events }) {
                   }}
                 >
                   <div className="text-[10px] font-mono tracking-widest uppercase font-bold" style={{ color: "#2563eb" }}>
-                    {event.date ? new Date(event.date).toLocaleDateString("en-US", { month: "short" }) : "TBA"}
+                    {event.date ? (
+                      event.end_date && event.end_date !== event.date
+                        ? `${new Date(event.date).toLocaleDateString("en-US", { month: "short" })}-${new Date(event.end_date).toLocaleDateString("en-US", { month: "short" })}`
+                        : new Date(event.date).toLocaleDateString("en-US", { month: "short" })
+                    ) : "TBA"}
                   </div>
-                  <div className="text-xl font-bold font-display" style={{ color: "var(--color-text-primary)" }}>
-                    {event.date ? new Date(event.date).getDate() : "-"}
+                  <div className="text-xl font-bold font-display leading-none mt-1" style={{ color: "var(--color-text-primary)" }}>
+                    {event.date ? (
+                      event.end_date && event.end_date !== event.date
+                        ? `${new Date(event.date).getDate()}-${new Date(event.end_date).getDate()}`
+                        : new Date(event.date).getDate()
+                    ) : "-"}
                   </div>
                 </div>
               </div>

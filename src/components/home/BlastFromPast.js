@@ -56,7 +56,11 @@ export default function BlastFromPast({ events }) {
                     <div
                       className="absolute top-2 right-2 px-2 py-1 rounded bg-black/60 backdrop-blur-sm border border-white/10 text-white text-[10px] font-mono uppercase tracking-wider"
                     >
-                      {event.date ? new Date(event.date).toLocaleDateString("en-US", { year: 'numeric', month: "short", day: 'numeric' }) : "TBA"}
+                      {event.date ? (
+                        event.end_date && event.end_date !== event.date
+                          ? `${new Date(event.date).toLocaleDateString("en-US", { month: "short", day: 'numeric' })} - ${new Date(event.end_date).toLocaleDateString("en-US", { year: 'numeric', month: "short", day: 'numeric' })}`
+                          : new Date(event.date).toLocaleDateString("en-US", { year: 'numeric', month: "short", day: 'numeric' })
+                      ) : "TBA"}
                     </div>
                   </div>
 

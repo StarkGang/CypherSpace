@@ -63,10 +63,14 @@ export default function FeaturedEvent({ event }) {
                 }}
               >
                 <div className="text-xs font-mono font-bold uppercase tracking-wider" style={{ color: "#2563eb" }}>
-                  Conducted On
+                  {event.status === "ongoing" ? "Ongoing" : event.status === "upcoming" ? "Happening On" : "Conducted On"}
                 </div>
-                <div className="text-lg font-bold font-display" style={{ color: "var(--color-text-primary)" }}>
-                  {event.date ? new Date(event.date).toLocaleDateString("en-US", { year: 'numeric', month: "long", day: 'numeric' }) : "TBA"}
+                <div className="text-lg font-bold font-display leading-tight mt-1" style={{ color: "var(--color-text-primary)" }}>
+                  {event.date ? (
+                    event.end_date && event.end_date !== event.date 
+                      ? <>{new Date(event.date).toLocaleDateString("en-US", { month: "short", day: 'numeric' })} <br/>to {new Date(event.end_date).toLocaleDateString("en-US", { year: 'numeric', month: "short", day: 'numeric' })}</>
+                      : new Date(event.date).toLocaleDateString("en-US", { year: 'numeric', month: "long", day: 'numeric' })
+                  ) : "TBA"}
                 </div>
               </div>
             </div>
