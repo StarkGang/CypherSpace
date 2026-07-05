@@ -5,7 +5,7 @@ import PageWrapper from "../../components/layout/PageWrapper";
 import SectionHeading from "../../components/design-system/SectionHeading";
 import Paper from "../../components/design-system/Paper";
 import Sticker from "../../components/design-system/Sticker";
-import TickerTape from "../../components/design-system/TickerTape";
+
 import { PageSkeleton, CardSkeleton } from "../../components/ui/Skeleton";
 import Button from "../../components/ui/Button";
 import Link from "next/link";
@@ -33,6 +33,25 @@ function formatDate(dateStr) {
     return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric', timeZone: 'UTC' });
   } catch {
     return dateStr;
+  }
+}
+
+function formatDateTimeRange(date, time, endDate, endTime) {
+  if (!date) return "";
+  
+  const fDate = formatDate(date);
+  const fTime = time ? formatTime(time) : "";
+  const fEndDate = endDate && endDate !== date ? formatDate(endDate) : "";
+  const fEndTime = endTime ? formatTime(endTime) : "";
+
+  if (fEndDate && fEndDate !== fDate) {
+    return `${fDate}${fTime ? ` ${fTime}` : ''} to ${fEndDate}${fEndTime ? ` ${fEndTime}` : ''}`;
+  } else {
+    if (fTime && fEndTime && fTime !== fEndTime) {
+      return `${fDate}, ${fTime} to ${fEndTime}`;
+    } else {
+      return `${fDate}${fTime ? `, ${fTime}` : ''}`;
+    }
   }
 }
 
@@ -181,25 +200,13 @@ export default function EventsList() {
                     </h3>
                     
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8 font-mono font-bold text-sm bg-[var(--color-paper-cream)] dark:bg-[#0d1117] p-4 border-brutal">
-                      {event.date && (
-                        <div className="flex items-center gap-3">
+                      {(event.date || event.time) && (
+                        <div className="flex items-center gap-3 sm:col-span-2">
                           <div className="w-8 h-8 rounded-full bg-[var(--color-sticker-pink)] border-2 border-black flex items-center justify-center flex-shrink-0">
                             <FiCalendar />
                           </div>
                           <span>
-                            {formatDate(event.date)}
-                            {event.end_date && event.end_date !== event.date && ` - ${formatDate(event.end_date)}`}
-                          </span>
-                        </div>
-                      )}
-                      {event.time && (
-                        <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 rounded-full bg-[var(--color-sticker-yellow)] border-2 border-black flex items-center justify-center flex-shrink-0">
-                            <FiClock />
-                          </div>
-                          <span>
-                            {formatTime(event.time)}
-                            {event.end_time && ` - ${formatTime(event.end_time)}`}
+                            {formatDateTimeRange(event.date, event.time, event.end_date, event.end_time)}
                           </span>
                         </div>
                       )}
@@ -246,7 +253,7 @@ export default function EventsList() {
         </div>
       </div>
 
-      <TickerTape items={["LEARN", "CONNECT", "NETWORK", "GROW", "SHARE", "DISCOVER"]} color="pink" rotate={-1} speed="fast" />
+
 
     </PageWrapper>
   );

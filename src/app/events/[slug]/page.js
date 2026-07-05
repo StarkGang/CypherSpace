@@ -101,6 +101,49 @@ const GalleryImage = ({ imgUrl, eventTitle, index }) => {
     </div>
   );
 };
+function formatTime(timeStr) {
+  if (!timeStr || !timeStr.includes(':')) return timeStr;
+  try {
+    const [h, m] = timeStr.split(':');
+    const d = new Date();
+    d.setHours(parseInt(h, 10));
+    d.setMinutes(parseInt(m, 10));
+    return d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+  } catch {
+    return timeStr;
+  }
+}
+
+function formatDate(dateStr) {
+  if (!dateStr) return '';
+  try {
+    const d = new Date(dateStr);
+    if (isNaN(d.getTime())) return dateStr;
+    return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric', timeZone: 'UTC' });
+  } catch {
+    return dateStr;
+  }
+}
+
+function formatDateTimeRange(date, time, endDate, endTime) {
+  if (!date) return "";
+  
+  const fDate = formatDate(date);
+  const fTime = time ? formatTime(time) : "";
+  const fEndDate = endDate && endDate !== date ? formatDate(endDate) : "";
+  const fEndTime = endTime ? formatTime(endTime) : "";
+
+  if (fEndDate && fEndDate !== fDate) {
+    return `${fDate}${fTime ? ` ${fTime}` : ''} to ${fEndDate}${fEndTime ? ` ${fEndTime}` : ''}`;
+  } else {
+    if (fTime && fEndTime && fTime !== fEndTime) {
+      return `${fDate}, ${fTime} to ${fEndTime}`;
+    } else {
+      return `${fDate}${fTime ? `, ${fTime}` : ''}`;
+    }
+  }
+}
+
 import { api } from "../../../lib/api";
 
 export default function EventDetail() {
@@ -188,31 +231,15 @@ export default function EventDetail() {
               </h1>
               
               <div className="flex flex-wrap gap-4 mt-8">
-                {event.date && (
+                {(event.date || event.time) && (
                   <div className="bg-[var(--color-paper-cream)] dark:bg-gray-800 border-2 border-black dark:border-white p-3 flex items-center gap-3 shadow-[4px_4px_0px_#1A1A1A] dark:shadow-[4px_4px_0px_#FFFFFF]">
                     <div className="bg-[var(--color-sticker-yellow)] p-2 border-2 border-black dark:border-white text-black">
                       <FiCalendar size={24} />
                     </div>
                     <div>
-                      <p className="font-mono text-xs font-bold uppercase text-gray-500 dark:text-gray-400">Date</p>
+                      <p className="font-mono text-xs font-bold uppercase text-gray-500 dark:text-gray-400">When</p>
                       <p className="font-display font-bold uppercase dark:text-white">
-                        {event.date}
-                        {event.end_date && event.end_date !== event.date && ` - ${event.end_date}`}
-                      </p>
-                    </div>
-                  </div>
-                )}
-                
-                {event.time && (
-                  <div className="bg-[var(--color-paper-cream)] dark:bg-gray-800 border-2 border-black dark:border-white p-3 flex items-center gap-3 shadow-[4px_4px_0px_#1A1A1A] dark:shadow-[4px_4px_0px_#FFFFFF]">
-                    <div className="bg-[var(--color-sticker-pink)] p-2 border-2 border-black dark:border-white text-black">
-                      <FiClock size={24} />
-                    </div>
-                    <div>
-                      <p className="font-mono text-xs font-bold uppercase text-gray-500 dark:text-gray-400">Time</p>
-                      <p className="font-display font-bold uppercase dark:text-white">
-                        {event.time}
-                        {event.end_time && ` - ${event.end_time}`}
+                        {formatDateTimeRange(event.date, event.time, event.end_date, event.end_time)}
                       </p>
                     </div>
                   </div>

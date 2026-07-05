@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Paper from "../../components/design-system/Paper";
 import Sticker from "../../components/design-system/Sticker";
-import TickerTape from "../../components/design-system/TickerTape";
+
 import Button from "../../components/ui/Button";
 import Link from "next/link";
 import { FiExternalLink } from "react-icons/fi";
@@ -108,7 +108,7 @@ export default function ProjectsGrid({ projects }) {
         </div>
       )}
 
-      <TickerTape items={["BUILD", "BREAK", "FIX", "DEPLOY", "ITERATE", "SCALE"]} color="yellow" rotate={2} speed="fast" className="mb-20" />
+
 
       <div className="container mx-auto max-w-7xl px-4">
         {regularProjects.length > 0 ? (
