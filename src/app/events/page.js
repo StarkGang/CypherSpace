@@ -42,9 +42,9 @@ function getPastEventStyles(event) {
   }
 
   let daysPast = null;
-  if (event.date) {
+  if (event.end_date || event.date) {
     try {
-      const eventDate = new Date(event.date);
+      const eventDate = new Date(event.end_date || event.date);
       if (!isNaN(eventDate.getTime())) {
         const now = new Date();
         daysPast = Math.floor((now - eventDate) / (1000 * 60 * 60 * 24));
@@ -82,8 +82,8 @@ export default function EventsList() {
       try {
         const res = await api.get("/events?per_page=50");
         const smartEvents = res.data.data.map(event => {
-          if (event.status !== 'past' && event.date) {
-            const eventDate = new Date(event.date);
+          if (event.status !== 'past' && (event.date || event.end_date)) {
+            const eventDate = new Date(event.end_date || event.date);
             if (!isNaN(eventDate.getTime())) {
               eventDate.setHours(23, 59, 59, 999);
               if (eventDate < new Date()) {
@@ -120,7 +120,7 @@ export default function EventsList() {
     if (statusWeight[a.status] !== statusWeight[b.status]) {
       return statusWeight[a.status] - statusWeight[b.status];
     }
-    return new Date(b.date || 0) - new Date(a.date || 0);
+    return new Date(b.end_date || b.date || 0) - new Date(a.end_date || a.date || 0);
   });
 
   return (
@@ -186,7 +186,10 @@ export default function EventsList() {
                           <div className="w-8 h-8 rounded-full bg-[var(--color-sticker-pink)] border-2 border-black flex items-center justify-center flex-shrink-0">
                             <FiCalendar />
                           </div>
-                          <span>{formatDate(event.date)}</span>
+                          <span>
+                            {formatDate(event.date)}
+                            {event.end_date && event.end_date !== event.date && ` - ${formatDate(event.end_date)}`}
+                          </span>
                         </div>
                       )}
                       {event.time && (
@@ -194,7 +197,10 @@ export default function EventsList() {
                           <div className="w-8 h-8 rounded-full bg-[var(--color-sticker-yellow)] border-2 border-black flex items-center justify-center flex-shrink-0">
                             <FiClock />
                           </div>
-                          <span>{formatTime(event.time)}</span>
+                          <span>
+                            {formatTime(event.time)}
+                            {event.end_time && ` - ${formatTime(event.end_time)}`}
+                          </span>
                         </div>
                       )}
                       {event.venue && (

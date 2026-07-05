@@ -118,8 +118,8 @@ export default function EventDetail() {
       try {
         const res = await api.get(`/events/${slug}`);
         let fetchedEvent = res.data.data;
-        if (fetchedEvent.status !== 'past' && fetchedEvent.date) {
-          const eventDate = new Date(fetchedEvent.date);
+        if (fetchedEvent.status !== 'past' && (fetchedEvent.date || fetchedEvent.end_date)) {
+          const eventDate = new Date(fetchedEvent.end_date || fetchedEvent.date);
           if (!isNaN(eventDate.getTime())) {
             eventDate.setHours(23, 59, 59, 999);
             if (eventDate < new Date()) {
@@ -195,7 +195,10 @@ export default function EventDetail() {
                     </div>
                     <div>
                       <p className="font-mono text-xs font-bold uppercase text-gray-500 dark:text-gray-400">Date</p>
-                      <p className="font-display font-bold uppercase dark:text-white">{event.date}</p>
+                      <p className="font-display font-bold uppercase dark:text-white">
+                        {event.date}
+                        {event.end_date && event.end_date !== event.date && ` - ${event.end_date}`}
+                      </p>
                     </div>
                   </div>
                 )}
@@ -207,7 +210,10 @@ export default function EventDetail() {
                     </div>
                     <div>
                       <p className="font-mono text-xs font-bold uppercase text-gray-500 dark:text-gray-400">Time</p>
-                      <p className="font-display font-bold uppercase dark:text-white">{event.time}</p>
+                      <p className="font-display font-bold uppercase dark:text-white">
+                        {event.time}
+                        {event.end_time && ` - ${event.end_time}`}
+                      </p>
                     </div>
                   </div>
                 )}

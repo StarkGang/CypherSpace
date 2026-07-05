@@ -24,7 +24,9 @@ export default function AdminEventForm() {
     title: "",
     description: "",
     date: "",
+    end_date: "",
     time: "",
+    end_time: "",
     venue: "",
     status: "upcoming",
     registration_link: "",
@@ -152,16 +154,33 @@ export default function AdminEventForm() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <Input
                   type="date"
-                  label="Date"
+                  label="Start Date"
                   name="date"
                   value={formData.date}
                   onChange={handleChange}
                 />
                 <Input
                   type="time"
-                  label="Time"
+                  label="Start Time"
                   name="time"
                   value={formData.time}
+                  onChange={handleChange}
+                />
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <Input
+                  type="date"
+                  label="End Date"
+                  name="end_date"
+                  value={formData.end_date || ""}
+                  onChange={handleChange}
+                />
+                <Input
+                  type="time"
+                  label="End Time"
+                  name="end_time"
+                  value={formData.end_time || ""}
                   onChange={handleChange}
                 />
               </div>
