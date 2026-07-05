@@ -107,15 +107,17 @@ function BlockFeed({ activities = [] }) {
       };
     });
 
-    const initialCount = Math.max(0, mappedReal.length - 4);
-    setEntries(mappedReal.slice(0, initialCount));
+    const initialCount = Math.min(4, mappedReal.length);
+    const startIndex = mappedReal.length - initialCount;
     
-    let i = initialCount;
+    setEntries(mappedReal.slice(startIndex));
+    
+    let i = startIndex - 1;
     const interval = setInterval(() => {
       setEntries((prev) => {
-        if (i < mappedReal.length) {
-          const next = [...prev, mappedReal[i]];
-          i++;
+        if (i >= 0) {
+          const next = [mappedReal[i], ...prev];
+          i--;
           return next;
         }
         clearInterval(interval);
@@ -128,7 +130,7 @@ function BlockFeed({ activities = [] }) {
 
   useEffect(() => {
     if (scrollRef.current) {
-      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+      scrollRef.current.scrollTop = 0;
     }
   }, [entries]);
 

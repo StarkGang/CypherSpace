@@ -70,13 +70,8 @@ export default function Footer() {
                 </span>
               </div>
               <p className="text-sm leading-relaxed" style={{ color: "var(--color-text-secondary)" }}>
-                A student-led blockchain and Web3 community building the decentralized future — one block at a time.
+                A student-led blockchain and Web3 community building the decentralized future one block at a time at NSSCE.
               </p>
-              
-              
-              <div className="mt-4 flex flex-col gap-1.5 text-xs font-mono" style={{ color: "var(--color-text-muted)" }}>
-                <p className="text-slate-400">NSS College of Engineering</p>
-              </div>
             </div>
 
             
@@ -140,7 +135,7 @@ export default function Footer() {
             color: "var(--color-text-muted)",
           }}
         >
-          <p>© {year} CypherSpace · NSS College of Engineering, Palakkad</p>
+          <p>© {year} CypherSpace</p>
           <p>
             Built with{" "}
             <span style={{ color: "#2563eb" }}>⛓</span> by FringeLabs

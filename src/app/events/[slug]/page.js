@@ -16,40 +16,90 @@ const getLinkMeta = (url) => {
     const host = parsed.hostname.toLowerCase();
     
     if (host.includes('youtube.com') || host.includes('youtu.be')) {
-      return { icon: FaYoutube, color: 'bg-[#FF0000]', text: 'text-white', label: 'YouTube Video' };
+      return { icon: FaYoutube, color: 'bg-[#FF0000]', text: 'text-white', label: 'YouTube Video', isKnownExternal: true };
     }
     if (host.includes('drive.google.com')) {
-      return { icon: FaGoogleDrive, color: 'bg-[#0F9D58]', text: 'text-white', label: 'Google Drive' };
+      return { icon: FaGoogleDrive, color: 'bg-[#0F9D58]', text: 'text-white', label: 'Google Drive', isKnownExternal: true };
     }
     if (host.includes('github.com')) {
-      return { icon: FaGithub, color: 'bg-[#181717]', text: 'text-white', label: 'GitHub Repository' };
+      return { icon: FaGithub, color: 'bg-[#181717]', text: 'text-white', label: 'GitHub Repository', isKnownExternal: true };
     }
     if (host.includes('figma.com')) {
-      return { icon: FaFigma, color: 'bg-[#F24E1E]', text: 'text-white', label: 'Figma Design' };
+      return { icon: FaFigma, color: 'bg-[#F24E1E]', text: 'text-white', label: 'Figma Design', isKnownExternal: true };
     }
     if (host.includes('linkedin.com')) {
-      return { icon: FaLinkedin, color: 'bg-[#0A66C2]', text: 'text-white', label: 'LinkedIn' };
+      return { icon: FaLinkedin, color: 'bg-[#0A66C2]', text: 'text-white', label: 'LinkedIn', isKnownExternal: true };
     }
     if (host.includes('instagram.com')) {
-      return { icon: FaInstagram, color: 'bg-[#E4405F]', text: 'text-white', label: 'Instagram' };
+      return { icon: FaInstagram, color: 'bg-[#E4405F]', text: 'text-white', label: 'Instagram', isKnownExternal: true };
     }
     if (host.includes('medium.com')) {
-      return { icon: FaMedium, color: 'bg-[#000000]', text: 'text-white', label: 'Medium Article' };
+      return { icon: FaMedium, color: 'bg-[#000000]', text: 'text-white', label: 'Medium Article', isKnownExternal: true };
     }
     if (host.includes('twitter.com') || host.includes('x.com')) {
-      return { icon: FaTwitter, color: 'bg-[#1DA1F2]', text: 'text-white', label: 'Twitter / X' };
+      return { icon: FaTwitter, color: 'bg-[#1DA1F2]', text: 'text-white', label: 'Twitter / X', isKnownExternal: true };
     }
     if (parsed.pathname.endsWith('.pdf')) {
-      return { icon: FiFileText, color: 'bg-[#FF5722]', text: 'text-white', label: 'PDF Document' };
+      return { icon: FiFileText, color: 'bg-[#FF5722]', text: 'text-white', label: 'PDF Document', isKnownExternal: true };
     }
     if (parsed.pathname.endsWith('.xlsx') || parsed.pathname.endsWith('.csv')) {
-      return { icon: FiGrid, color: 'bg-[#21A366]', text: 'text-white', label: 'Spreadsheet' };
+      return { icon: FiGrid, color: 'bg-[#21A366]', text: 'text-white', label: 'Spreadsheet', isKnownExternal: true };
     }
     
-    return { icon: FiExternalLink, color: 'bg-[var(--color-sticker-pink)]', text: 'text-black', label: host.replace(/^www\./, '') };
+    return { icon: FiExternalLink, color: 'bg-[var(--color-sticker-pink)]', text: 'text-black', label: host.replace(/^www\./, ''), isKnownExternal: false };
   } catch(e) {
-    return { icon: FiExternalLink, color: 'bg-gray-200', text: 'text-black', label: 'External Link' };
+    return { icon: FiExternalLink, color: 'bg-gray-200', text: 'text-black', label: 'External Link', isKnownExternal: false };
   }
+};
+
+const GalleryImage = ({ imgUrl, eventTitle, index }) => {
+  const [failed, setFailed] = useState(false);
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    const meta = getLinkMeta(imgUrl);
+    if (meta.isKnownExternal) {
+      setFailed(true);
+      return;
+    }
+
+    const timer = setTimeout(() => {
+      if (!loaded) {
+        setFailed(true);
+      }
+    }, 2000); 
+
+    return () => clearTimeout(timer);
+  }, [imgUrl, loaded]);
+
+  const meta = getLinkMeta(imgUrl);
+  const Icon = meta.icon;
+
+  return (
+    <div className="aspect-[4/3] border-brutal overflow-hidden relative bg-gray-100 dark:bg-gray-800">
+      {!failed && (
+        <img 
+          src={imgUrl} 
+          alt={`${eventTitle} gallery ${index+1}`} 
+          className="w-full h-full object-cover hover:scale-105 transition-transform absolute inset-0 z-10" 
+          onLoad={() => setLoaded(true)}
+          onError={() => setFailed(true)}
+        />
+      )}
+      
+      {(failed || !loaded) && (
+        <div className={`w-full h-full flex-col items-center justify-center bg-[var(--color-paper-cream)] p-4 text-center border-brutal border-t-0 border-l-0 border-r-0 border-b-0 h-full relative z-0 ${failed ? 'flex' : 'hidden'}`}>
+          <div className={`p-4 rounded-full mb-3 border-2 border-black ${meta.color} ${meta.text} shadow-[2px_2px_0px_#000]`}>
+            <Icon className="w-8 h-8" />
+          </div>
+          <h3 className="font-display font-bold uppercase text-black text-sm mb-3 line-clamp-1">{meta.label}</h3>
+          <a href={imgUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-[10px] font-mono font-bold uppercase bg-black text-white px-4 py-2 hover:bg-gray-800 transition-colors shadow-[2px_2px_0px_var(--color-sticker-pink)]">
+            Open Link <FiExternalLink />
+          </a>
+        </div>
+      )}
+    </div>
+  );
 };
 import { api } from "../../../lib/api";
 
@@ -201,34 +251,7 @@ export default function EventDetail() {
                         </h2>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                           {event.gallery.map((imgUrl, i) => (
-                            <div key={i} className="aspect-[4/3] border-brutal overflow-hidden relative bg-gray-100 dark:bg-gray-800">
-                              <img 
-                                src={imgUrl} 
-                                alt={`${event.title} gallery ${i+1}`} 
-                                className="w-full h-full object-cover hover:scale-105 transition-transform" 
-                                onError={(e) => {
-                                  e.target.style.display = 'none';
-                                  e.target.nextSibling.style.display = 'flex';
-                                }}
-                              />
-                              <div className="hidden w-full h-full flex-col items-center justify-center bg-[var(--color-paper-cream)] p-4 text-center border-brutal border-t-0 border-l-0 border-r-0 border-b-0 h-full relative">
-                                {(() => {
-                                  const meta = getLinkMeta(imgUrl);
-                                  const Icon = meta.icon;
-                                  return (
-                                    <>
-                                      <div className={`p-4 rounded-full mb-3 border-2 border-black ${meta.color} ${meta.text} shadow-[2px_2px_0px_#000]`}>
-                                        <Icon className="w-8 h-8" />
-                                      </div>
-                                      <h3 className="font-display font-bold uppercase text-black text-sm mb-3 line-clamp-1">{meta.label}</h3>
-                                      <a href={imgUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-[10px] font-mono font-bold uppercase bg-black text-white px-4 py-2 hover:bg-gray-800 transition-colors shadow-[2px_2px_0px_var(--color-sticker-pink)]">
-                                        Open Link <FiExternalLink />
-                                      </a>
-                                    </>
-                                  );
-                                })()}
-                              </div>
-                            </div>
+                            <GalleryImage key={i} imgUrl={imgUrl} eventTitle={event.title} index={i} />
                           ))}
                         </div>
                       </div>
