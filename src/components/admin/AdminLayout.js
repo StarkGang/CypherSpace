@@ -144,13 +144,6 @@ export default function AdminLayout({ children, requiredRole = "editor" }) {
             Refresh Cache
           </button>
           <button
-            onClick={toggleDark}
-            className="flex items-center gap-3 px-3 py-2 mb-1 w-full text-sm font-medium rounded-md text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-[#21262d] transition-colors"
-          >
-            {isDark ? <FiSun className="text-slate-400" /> : <FiMoon className="text-slate-400" />}
-            {isDark ? "Light Mode" : "Dark Mode"}
-          </button>
-          <button
             onClick={logout}
             className="flex items-center gap-3 px-3 py-2 w-full text-sm font-medium rounded-md text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10 transition-colors"
           >

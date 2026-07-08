@@ -8,7 +8,7 @@ export default function LatestPaper({ paper }) {
   if (!paper) return null;
 
   return (
-    <section className="py-12 px-4 relative z-10 border-t border-[var(--color-border-subtle)]" style={{ background: "linear-gradient(to bottom, transparent, rgba(124,58,237,0.02))" }}>
+    <section className="py-12 px-4 relative z-10 border-t border-[var(--color-border-subtle)]" style={{ background: "linear-gradient(to bottom, transparent, rgba(0, 174, 239, 0.02))" }}>
       <div className="container mx-auto max-w-7xl">
         <div className="flex flex-col md:flex-row-reverse items-center gap-12 lg:gap-16">
           
@@ -40,12 +40,7 @@ export default function LatestPaper({ paper }) {
 
             <Link
               href={`/papers/${paper.slug}`}
-              className="inline-flex items-center gap-3 px-6 py-3 rounded-xl font-semibold text-sm transition-all duration-300 group"
-              style={{
-                background: "linear-gradient(135deg, #7c3aed, #4361ee)",
-                color: "#fff",
-                boxShadow: "0 0 20px rgba(124,58,237,0.3)",
-              }}
+              className="btn-solid-primary mt-2 shadow-[0_0_20px_var(--color-neon-glow)] group"
             >
               Read Whitepaper
               <span className="transform group-hover:translate-x-1 transition-transform">→</span>
@@ -63,7 +58,7 @@ export default function LatestPaper({ paper }) {
               <div
                 className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
                 style={{
-                  background: "linear-gradient(135deg, rgba(124,58,237,0.1), transparent)",
+                  background: "linear-gradient(135deg, rgba(0, 174, 239, 0.1), transparent)",
                 }}
               />
               

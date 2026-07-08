@@ -1,7 +1,6 @@
 "use client";
 import React from "react";
 import { motion } from "framer-motion";
-import { FiBox, FiCpu, FiGlobe, FiDatabase } from "react-icons/fi";
 
 export default function ClubStats({ stats, settings }) {
   const overrides = settings?.club_stats || {};
@@ -14,59 +13,53 @@ export default function ClubStats({ stats, settings }) {
   };
 
   const statItems = [
-    { label: "Members", value: getStatValue('members', 69), icon: <FiGlobe size={28} />, color: "#10b981" },
-    { label: "Projects", value: getStatValue('projects', 0), icon: <FiBox size={28} />, color: "#2563eb" },
-    { label: "Events", value: getStatValue('events', 1), icon: <FiCpu size={28} />, color: "#4f46e5" },
-    { label: "Research Papers", value: getStatValue('papers', 0), icon: <FiDatabase size={28} />, color: "#db2777" },
+    { label: "Members", value: getStatValue('members', 69), desc: "Active students building and learning together in our ecosystem." },
+    { label: "Projects", value: getStatValue('projects', 0), desc: "Open-source decentralized applications and tools developed." },
+    { label: "Events", value: getStatValue('events', 1), desc: "Workshops, hackathons, and meetups hosted for the community." },
+    { label: "Research Papers", value: getStatValue('papers', 0), desc: "Academic and technical papers published by our members." },
   ];
 
   return (
-    <section className="py-12 w-full overflow-hidden relative z-10 bg-transparent">
-      <div className="container mx-auto px-4 mb-10 text-center flex justify-center">
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[var(--color-border-subtle)] bg-[var(--color-glass-bg)] shadow-sm">
-          <div className="w-1.5 h-1.5 rounded-full bg-[#10b981]" />
-          <span className="text-xs font-medium text-[var(--color-text-secondary)] tracking-wide">
-            Statistics & Community Impact
-          </span>
+    <section className="py-24 w-full relative z-10 bg-[#0A0E16]">
+      <div className="container mx-auto px-4 max-w-5xl">
+        
+        <div className="flex items-center gap-4 mb-16">
+          <h2 className="font-display font-bold text-4xl md:text-5xl uppercase leading-none text-white tracking-tight">
+            NETWORK<br/>STATS
+          </h2>
+          <div className="flex gap-2 ml-4">
+            <div className="w-8 h-2 rounded-full bg-[var(--color-primary-accent)]"></div>
+            <div className="w-2 h-2 rounded-full bg-gray-700"></div>
+            <div className="w-2 h-2 rounded-full bg-gray-700"></div>
+          </div>
         </div>
-      </div>
 
-      <div 
-        className="relative flex overflow-hidden w-full group"
-        style={{
-          maskImage: "linear-gradient(to right, transparent, black 10%, black 90%, transparent)",
-          WebkitMaskImage: "linear-gradient(to right, transparent, black 10%, black 90%, transparent)"
-        }}
-      >
-        <motion.div
-          animate={{ x: ["0%", "-50%"] }}
-          transition={{ repeat: Infinity, duration: 50, ease: "linear" }}
-          className="flex whitespace-nowrap min-w-max items-center"
-        >
-          {[...statItems, ...statItems, ...statItems, ...statItems].map((stat, index) => (
-            <div 
-              key={index} 
-              className="flex items-center gap-4 mx-12 transition-opacity duration-300"
-              style={{ color: "var(--color-text-primary)" }}
+        <div className="flex flex-col gap-8 md:gap-12">
+          {statItems.map((stat, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+              className="flex flex-col md:flex-row md:items-center gap-4 md:gap-12 border-b border-white/5 pb-8 md:pb-12"
             >
-              <div
-                className="w-12 h-12 rounded-xl flex items-center justify-center"
-                style={{
-                  background: `linear-gradient(135deg, ${stat.color}22, ${stat.color}11)`,
-                  border: `1px solid ${stat.color}44`,
-                  color: stat.color,
-                  boxShadow: `0 0 15px ${stat.color}33`
-                }}
-              >
-                {stat.icon}
+              <div className="flex-shrink-0 w-48">
+                <span className="font-display font-bold text-7xl md:text-8xl leading-none tracking-tighter" style={{ color: "var(--color-primary-accent)" }}>
+                  {stat.value}+
+                </span>
               </div>
-              <div className="flex flex-col">
-                <span className="text-3xl font-display font-bold leading-none mb-1">{stat.value}+</span>
-                <span className="text-xs font-mono uppercase tracking-wider text-[var(--color-text-muted)] leading-none">{stat.label}</span>
+              <div className="flex flex-col gap-2">
+                <h3 className="font-mono text-sm md:text-base uppercase tracking-widest font-bold text-white">
+                  {stat.label}
+                </h3>
+                <p className="text-[var(--color-text-secondary)] text-sm md:text-base leading-relaxed max-w-lg font-body">
+                  {stat.desc}
+                </p>
               </div>
-            </div>
+            </motion.div>
           ))}
-        </motion.div>
+        </div>
       </div>
     </section>
   );

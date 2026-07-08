@@ -10,7 +10,7 @@ export default function Sponsors({ sponsors = [] }) {
     <section className="py-12 px-4 w-full relative z-10">
       <div className="container mx-auto max-w-7xl">
         <SectionHeading
-          title={<>Our <span style={{color: "#2563eb"}}>Sponsors</span></>}
+          title={<>Our <span style={{color: "var(--color-primary-accent)"}}>Sponsors</span></>}
           subtitle="Proudly supported by organizations building the future of Web3."
           metadata="STRATEGIC PARTNERS"
           align="center"
@@ -24,7 +24,7 @@ export default function Sponsors({ sponsors = [] }) {
               href={s.url || "#"}
               target="_blank"
               rel="noopener noreferrer"
-              className="glass-card flex flex-col items-center justify-between p-6 transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_0_30px_rgba(37,99,235,0.15)] group relative overflow-hidden"
+              className="glass-card flex flex-col items-center justify-between p-6 transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_0_30px_var(--color-neon-glow)] group relative overflow-hidden"
               style={{
                 width: "100%",
                 maxWidth: "300px",
@@ -49,7 +49,7 @@ export default function Sponsors({ sponsors = [] }) {
               
               <div className="flex flex-col items-center text-center w-full">
                 <span
-                  className="text-sm font-bold font-display tracking-wide group-hover:text-[#2563eb] transition-colors"
+                  className="text-sm font-bold font-display tracking-wide group-hover:text-[var(--color-primary-accent)] transition-colors"
                   style={{ color: "var(--color-text-primary)" }}
                 >
                   {s.name}
@@ -80,7 +80,7 @@ export default function Sponsors({ sponsors = [] }) {
           Interested in sponsoring?{" "}
           <Link
             href="/contact"
-            style={{ color: "#2563eb" }}
+            style={{ color: "var(--color-primary-accent)" }}
             className="hover:underline"
           >
             Get in touch →

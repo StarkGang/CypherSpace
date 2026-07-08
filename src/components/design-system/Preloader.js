@@ -54,6 +54,8 @@ export default function Preloader() {
               <img 
                 src="/logo.svg" 
                 alt="CypherSpace" 
+                fetchPriority="high"
+                decoding="sync"
                 className="w-full h-full object-contain drop-shadow-[0_0_25px_rgba(37,99,235,0.6)] relative z-10" 
               />
               

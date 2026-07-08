@@ -1,4 +1,4 @@
-import { Inter, Space_Grotesk, JetBrains_Mono } from "next/font/google";
+import { Inter, Anton, JetBrains_Mono } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 
@@ -7,9 +7,10 @@ const inter = Inter({
   variable: "--font-inter",
 });
 
-const spaceGrotesk = Space_Grotesk({
+const anton = Anton({
+  weight: "400",
   subsets: ["latin"],
-  variable: "--font-space-grotesk",
+  variable: "--font-anton",
 });
 
 const jetbrainsMono = JetBrains_Mono({
@@ -56,14 +57,12 @@ import LaunchProvider from "../components/layout/LaunchProvider";
 import { getSettings } from "../lib/data";
 
 export default async function RootLayout({ children }) {
-  const cookieStore = await cookies();
-  const theme = cookieStore.get("theme")?.value;
-  const isDark = theme === "dark";
   const settings = await getSettings();
 
   return (
-    <html lang="en" className={isDark ? "dark" : ""}>
+    <html lang="en" className="dark">
       <head>
+        <link rel="preload" href="/logo.svg" as="image" type="image/svg+xml" />
         <Script id="clarity-script" strategy="afterInteractive">
           {`
             (function(c,l,a,r,i,t,y){
@@ -74,7 +73,7 @@ export default async function RootLayout({ children }) {
           `}
         </Script>
       </head>
-      <body className={`${inter.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable} antialiased`}>
+      <body className={`${inter.variable} ${anton.variable} ${jetbrainsMono.variable} antialiased`}>
         <ThemeProvider>
           <AuthProvider>
             <LaunchProvider settings={settings}>

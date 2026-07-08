@@ -8,6 +8,7 @@ import Sticker from "../../../components/design-system/Sticker";
 import { PageSkeleton, CardSkeleton } from "../../../components/ui/Skeleton";
 import Button from "../../../components/ui/Button";
 import { FaGithub, FaExternalLinkAlt } from "react-icons/fa";
+import GalleryImage from "../../../components/ui/GalleryImage";
 import { api } from "../../../lib/api";
 
 export default function ProjectDetail() {
@@ -79,7 +80,7 @@ export default function ProjectDetail() {
             </div>
           </div>
 
-          <div className="p-6 md:p-12 bg-white dark:bg-[#161b22]">
+          <div className="p-6 md:p-12">
             
             <div className="mb-10 border-b-4 border-black dark:border-white pb-8">
               <h1 className="font-display font-black text-5xl md:text-7xl uppercase tracking-tighter leading-none mb-6 dark:text-white">
@@ -102,9 +103,9 @@ export default function ProjectDetail() {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
                   <div className={hasSidebar ? "md:col-span-2" : "md:col-span-3"}>
                     {project.description && (
-                      <div className="border-t-4 border-black dark:border-white pt-8">
-                        <h2 className="font-display font-black text-2xl uppercase mb-4 dark:text-white">About the Project</h2>
-                        <div className="font-body text-lg leading-relaxed whitespace-pre-wrap text-gray-800 dark:text-gray-300">
+                      <div className="border-t border-[var(--color-glass-border)] pt-8">
+                        <h2 className="font-display font-black text-2xl uppercase mb-4 text-[var(--color-primary-accent)]">About the Project</h2>
+                        <div className="font-body text-lg leading-relaxed whitespace-pre-wrap text-[var(--color-text-secondary)]">
                           {project.description}
                         </div>
                       </div>
@@ -112,14 +113,12 @@ export default function ProjectDetail() {
 
                 {project.gallery && project.gallery.length > 0 && (
                   <div className="mt-16">
-                    <h2 className="font-display font-black text-3xl uppercase mb-6 bg-[var(--color-sticker-lime)] inline-block px-2 border-brutal">
+                    <h2 className="font-display font-black text-3xl uppercase mb-6 text-[var(--color-primary-accent)] inline-block">
                       Gallery
                     </h2>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       {project.gallery.map((imgUrl, i) => (
-                        <div key={i} className="aspect-video border-brutal overflow-hidden">
-                          <img src={imgUrl} alt={`${project.title} gallery ${i+1}`} className="w-full h-full object-cover hover:scale-105 transition-transform" />
-                        </div>
+                        <GalleryImage key={i} imgUrl={imgUrl} title={project.title} index={i} />
                       ))}
                     </div>
                   </div>
@@ -130,8 +129,8 @@ export default function ProjectDetail() {
                     <div className="md:col-span-1 flex flex-col gap-8">
                       
                       {(project.github_link || project.demo_link) && (
-                        <Paper variant="pinned" noPadding className="p-6 bg-[var(--color-paper-cream)] dark:bg-[#161b22]" rotate={2} shadowSize="sm">
-                          <h3 className="font-mono font-bold uppercase tracking-widest text-sm mb-4 border-b border-black dark:border-white pb-2 dark:text-white">Links</h3>
+                        <Paper variant="default" noPadding className="p-6 border border-[var(--color-glass-border)]" rotate={0} shadowSize="sm">
+                          <h3 className="font-mono font-bold uppercase tracking-widest text-sm mb-4 border-b border-gray-700 pb-2 text-white">Links</h3>
                           <div className="flex flex-col gap-3">
                             {project.demo_link && (
                               <Button href={project.demo_link} variant="primary" fullWidth icon={<FaExternalLinkAlt />}>
@@ -148,11 +147,11 @@ export default function ProjectDetail() {
                       )}
 
                       {project.tech_stack && project.tech_stack.length > 0 && (
-                        <div className="border-l-4 border-black dark:border-white pl-4">
-                          <h3 className="font-mono font-bold uppercase tracking-widest text-sm mb-4 dark:text-white">Technology Stack</h3>
+                        <div className="border-l-2 border-[var(--color-primary-accent)] pl-4">
+                          <h3 className="font-mono font-bold uppercase tracking-widest text-sm mb-4 text-white">Technology Stack</h3>
                           <div className="flex flex-wrap gap-2">
                             {project.tech_stack.map((tech, i) => (
-                              <span key={i} className="font-mono text-sm border-2 border-black dark:border-white px-2 py-1 bg-white dark:bg-gray-800 font-bold dark:text-white">
+                              <span key={i} className="font-mono text-sm border border-[var(--color-glass-border)] px-2 py-1 bg-gray-800/50 font-bold text-[var(--color-text-secondary)] rounded-md">
                                 {tech}
                               </span>
                             ))}
@@ -161,12 +160,12 @@ export default function ProjectDetail() {
                       )}
 
                       {project.contributors && project.contributors.length > 0 && (
-                        <div className="border-l-4 border-[var(--color-sticker-pink)] pl-4">
-                          <h3 className="font-mono font-bold uppercase tracking-widest text-sm mb-4 dark:text-white">Contributors</h3>
+                        <div className="border-l-2 border-[var(--color-primary-accent)] pl-4">
+                          <h3 className="font-mono font-bold uppercase tracking-widest text-sm mb-4 text-white">Contributors</h3>
                           <ul className="flex flex-col gap-2">
                             {project.contributors.map((contributor, i) => (
-                              <li key={i} className="font-display font-bold uppercase text-lg flex items-center gap-2 dark:text-white">
-                                <div className="w-2 h-2 bg-black dark:bg-white rounded-full" />
+                              <li key={i} className="font-display font-bold uppercase text-lg flex items-center gap-2 text-[var(--color-text-primary)]">
+                                <div className="w-2 h-2 bg-[var(--color-primary-accent)] rounded-full" />
                                 {contributor}
                               </li>
                             ))}

@@ -135,7 +135,7 @@ export default function Footer() {
             color: "var(--color-text-muted)",
           }}
         >
-          <p>© {year} CypherSpace</p>
+          <p>© {year} CypherSpace • NSS College of Engineering, Palakkad</p>
           <p>
             Built with{" "}
             <span style={{ color: "#2563eb" }}>⛓</span> by <a href="https://github.com/fringelabs" target="_blank" rel="noopener noreferrer" className="hover:text-[#2563eb] transition-colors">FringeLabs</a>

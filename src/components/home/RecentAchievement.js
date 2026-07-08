@@ -23,12 +23,7 @@ export default function RecentAchievement({ achievement }) {
           <div className="hidden md:block pb-2">
             <Link 
               href="/achievements"
-              className="px-6 py-3 rounded-xl border transition-all text-sm font-semibold hover:scale-105"
-              style={{
-                borderColor: "var(--color-border-subtle)",
-                color: "var(--color-text-primary)",
-                background: "transparent",
-              }}
+              className="btn-outline"
             >
               View All Milestones
             </Link>
@@ -44,7 +39,7 @@ export default function RecentAchievement({ achievement }) {
           <div className="chain-card overflow-hidden group">
             <div className="flex flex-col md:flex-row">
               
-              <div className="w-full md:w-1/2 relative bg-[#030812] overflow-hidden border-r" style={{ borderColor: "rgba(0,212,170,0.1)" }}>
+              <div className="w-full md:w-1/2 relative bg-[var(--color-bg-deep)] overflow-hidden border-r" style={{ borderColor: "var(--color-border-subtle)" }}>
                 {achievement.image ? (
                   <img src={achievement.image} alt={achievement.title} className="w-full h-full object-cover brightness-90 group-hover:brightness-100 group-hover:scale-105 transition-all duration-700" />
                 ) : (
@@ -58,7 +53,7 @@ export default function RecentAchievement({ achievement }) {
                 
                 <div className="absolute bottom-6 left-6 z-20">
                   <div className="font-mono text-[10px] uppercase font-bold px-3 py-1.5 rounded-lg border backdrop-blur-md"
-                    style={{ color: "#fbbf24", background: "rgba(12,26,46,0.8)", borderColor: "rgba(251,191,36,0.3)", boxShadow: "0 0 10px rgba(251,191,36,0.1)" }}
+                    style={{ color: "var(--color-primary-accent)", background: "var(--color-glass-bg)", borderColor: "var(--color-primary-accent)", boxShadow: "0 0 10px var(--color-neon-glow)" }}
                   >
                     {achievement.date}
                   </div>
@@ -66,10 +61,10 @@ export default function RecentAchievement({ achievement }) {
               </div>
 
               <div className="w-full md:w-1/2 p-8 md:p-12 flex flex-col justify-center relative">
-                <div className="absolute top-0 right-0 w-64 h-64 blur-[80px] rounded-full pointer-events-none" style={{ background: "rgba(251,191,36,0.05)" }}></div>
+                <div className="absolute top-0 right-0 w-64 h-64 blur-[80px] rounded-full pointer-events-none" style={{ background: "var(--color-blue-glow)" }}></div>
                 
                 <h3 className="font-display font-bold text-2xl md:text-3xl mb-6 leading-tight transition-colors duration-300" style={{ color: "#e2e8f0" }}
-                  onMouseOver={e => e.currentTarget.style.color = "#fbbf24"}
+                  onMouseOver={e => e.currentTarget.style.color = "var(--color-primary-accent)"}
                   onMouseOut={e => e.currentTarget.style.color = "#e2e8f0"}
                 >
                   {achievement.title}
@@ -80,7 +75,7 @@ export default function RecentAchievement({ achievement }) {
                 </p>
 
                 {achievement.members && achievement.members.length > 0 && (
-                  <div className="mb-8 relative z-10 border-t pt-6" style={{ borderColor: "rgba(0,212,170,0.1)" }}>
+                  <div className="mb-8 relative z-10 border-t pt-6" style={{ borderColor: "var(--color-border-subtle)" }}>
                     <p className="font-mono text-[10px] font-bold uppercase tracking-widest mb-2" style={{ color: "#64748b" }}>Nodes Involved</p>
                     <p className="font-medium" style={{ color: "#e2e8f0" }}>{achievement.members.join(", ")}</p>
                   </div>
@@ -90,7 +85,7 @@ export default function RecentAchievement({ achievement }) {
                   <Link 
                     href="/achievements"
                     className="inline-flex items-center gap-2 font-mono font-bold uppercase text-[10px] tracking-widest pb-1 transition-all"
-                    style={{ color: "#fbbf24", borderBottom: "1px solid rgba(251,191,36,0.3)" }}
+                    style={{ color: "var(--color-primary-accent)", borderBottom: "1px solid var(--color-primary-accent)" }}
                   >
                     View All Milestones <span className="transform transition-transform">→</span>
                   </Link>

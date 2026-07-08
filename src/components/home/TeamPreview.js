@@ -1,105 +1,98 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
+import { motion } from "framer-motion";
 import Link from "next/link";
 import { FaGithub, FaLinkedin, FaGlobe } from "react-icons/fa";
-import { motion } from "framer-motion";
-import SectionHeading from "../design-system/SectionHeading";
 
 export default function TeamPreview({ team }) {
+  const [activeIdx, setActiveIdx] = useState(Math.floor((team?.length || 0) / 2));
   if (!team || team.length === 0) return null;
 
-  return (
-    <section className="py-12 px-4 w-full relative z-10 border-t border-[var(--color-border-subtle)]">
-      <div className="container mx-auto max-w-7xl">
-        
-        <SectionHeading
-          title={<>The <span style={{color: "#2563eb"}}>Makers</span></>}
-          subtitle="The core developers and researchers maintaining the CypherSpace ecosystem."
-          metadata="CORE TEAM"
-          align="center"
-          className="mb-16"
-        />
+  const activeMember = team[activeIdx];
 
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
-          {team.map((member, index) => (
-            <motion.div 
-              key={member.id}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="relative group"
-            >
-              <div className="chain-card p-4 flex flex-col items-center text-center h-full transition-all duration-300">
-                
-                <div
-                  className="w-20 h-20 md:w-24 md:h-24 overflow-hidden mb-4 relative z-10 transition-all duration-300 group-hover:scale-105"
+  return (
+    <section className="py-24 px-4 w-full relative z-10 overflow-hidden bg-[var(--color-bg-deep)]">
+      <div className="container mx-auto w-full max-w-full px-0">
+        <div className="flex justify-center items-center h-64 md:h-80 mb-12 relative -mx-4 md:-mx-12">
+          <div className="absolute top-1/2 left-0 right-0 h-[1px] bg-white/10 -z-10"></div>
+          
+          <div className="flex items-center justify-center gap-2 md:gap-4 px-2 md:px-8 w-full">
+            {team.map((member, index) => {
+              const isActive = index === activeIdx;
+              const isEven = index % 2 === 0;
+              
+              return (
+                <motion.div
+                  layout
+                  transition={{ type: "spring", stiffness: 150, damping: 20, mass: 0.8 }}
+                  key={member.id || index}
+                  onClick={() => setActiveIdx(index)}
+                  className={`relative cursor-pointer flex-shrink-0 bg-[var(--color-bg-surface)] 
+                    ${isActive ? 'w-32 h-48 md:w-64 md:h-[400px] z-20 shadow-[0_0_50px_var(--color-neon-glow)]' : 'w-12 h-16 md:w-40 md:h-64 z-10 opacity-60 hover:opacity-100'}
+                  `}
                   style={{
-                    clipPath: "polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)",
-                    background: "var(--color-bg-surface)",
-                    border: "2px solid var(--color-border-subtle)",
+                    filter: isActive ? 'none' : 'grayscale(100%) contrast(1.2)',
+                    border: isActive ? '1px solid var(--color-glass-border)' : '1px solid transparent',
                   }}
                 >
                   {member.image ? (
                     <img src={member.image} alt={member.name} className="w-full h-full object-cover" />
                   ) : (
-                    <div
-                      className="w-full h-full flex items-center justify-center font-display font-bold text-3xl uppercase"
-                      style={{
-                        background: "#2563eb",
-                        color: "#fff",
-                      }}
-                    >
-                      {member.name.charAt(0)}
+                    <div className="w-full h-full flex items-center justify-center font-display font-bold text-3xl uppercase bg-[var(--color-bg-surface)] text-[var(--color-text-muted)]">
+                      {member.name?.charAt(0) || "U"}
                     </div>
                   )}
-                </div>
-                
-                <h4 className="font-display font-bold text-lg md:text-lg leading-tight mb-1" style={{ color: "var(--color-text-primary)" }}>
-                  {member.name}
-                </h4>
-                
-                <p className="font-mono text-[10px] font-bold uppercase tracking-widest mb-4" style={{ color: "#2563eb" }}>
-                  {member.role || "Member"}
-                </p>
-
-                <div className="flex gap-3 mt-auto">
-                  {member.github && (
-                    <a href={member.github} target="_blank" rel="noreferrer" className="transition-colors" style={{ color: "var(--color-text-muted)" }} onMouseOver={e => e.currentTarget.style.color = "#2563eb"} onMouseOut={e => e.currentTarget.style.color = "var(--color-text-muted)"}>
-                      <FaGithub size={16} />
-                    </a>
+                  {isActive && (
+                    <div className="absolute inset-0 border-[4px] border-[var(--color-primary-accent)] pointer-events-none opacity-40"></div>
                   )}
-                  {member.linkedin && (
-                    <a href={member.linkedin} target="_blank" rel="noreferrer" className="transition-colors" style={{ color: "var(--color-text-muted)" }} onMouseOver={e => e.currentTarget.style.color = "#2563eb"} onMouseOut={e => e.currentTarget.style.color = "var(--color-text-muted)"}>
-                      <FaLinkedin size={16} />
-                    </a>
-                  )}
-                  {member.portfolio && (
-                    <a href={member.portfolio} target="_blank" rel="noreferrer" className="transition-colors" style={{ color: "var(--color-text-muted)" }} onMouseOver={e => e.currentTarget.style.color = "#2563eb"} onMouseOut={e => e.currentTarget.style.color = "var(--color-text-muted)"}>
-                      <FaGlobe size={16} />
-                    </a>
-                  )}
-                </div>
-              </div>
-            </motion.div>
-          ))}
+                </motion.div>
+              );
+            })}
+          </div>
         </div>
+        {activeMember && (
+          <div className="flex flex-col items-center text-center max-w-2xl mx-auto px-4">
+            <h3 className="font-display font-bold text-3xl md:text-5xl uppercase text-white mb-4 tracking-tight">
+              {activeMember.name}
+            </h3>
+            
+            <p className="text-[var(--color-text-secondary)] text-base md:text-xl font-body leading-relaxed mb-6">
+              "{activeMember.role || "Core Contributor"}"
+            </p>
 
-        <div className="mt-16 text-center">
-          <Link 
-            href="/team"
-            className="inline-flex items-center gap-2 font-mono font-bold tracking-widest uppercase text-xs transition-all duration-300 group pb-1"
-            style={{
-              color: "#2563eb",
-              borderBottom: "1px solid rgba(37, 99, 235, 0.3)"
-            }}
-            onMouseOver={e => e.currentTarget.style.borderBottomColor = "#2563eb"}
-            onMouseOut={e => e.currentTarget.style.borderBottomColor = "rgba(37, 99, 235, 0.3)"}
-          >
-            Meet All Nodes
-            <span className="transform group-hover:translate-x-1 transition-transform">→</span>
-          </Link>
-        </div>
+            <div className="flex gap-4 mb-10 text-[var(--color-text-secondary)]">
+              {activeMember.github && (
+                <a href={activeMember.github} target="_blank" rel="noreferrer" className="hover:text-[var(--color-primary-accent)] transition-colors">
+                  <FaGithub size={20} />
+                </a>
+              )}
+              {activeMember.linkedin && (
+                <a href={activeMember.linkedin} target="_blank" rel="noreferrer" className="hover:text-[var(--color-primary-accent)] transition-colors">
+                  <FaLinkedin size={20} />
+                </a>
+              )}
+              {activeMember.portfolio && (
+                <a href={activeMember.portfolio} target="_blank" rel="noreferrer" className="hover:text-[var(--color-primary-accent)] transition-colors">
+                  <FaGlobe size={20} />
+                </a>
+              )}
+            </div>
+            <div className="flex gap-3 justify-center mb-12">
+              {team.map((_, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => setActiveIdx(idx)}
+                  className={`transition-all duration-300 rounded-[2px] ${idx === activeIdx ? 'w-4 h-4 bg-[var(--color-primary-accent)]' : 'w-2 h-2 bg-gray-700 hover:bg-gray-500 mt-1'}`}
+                  aria-label={`Select ${idx}`}
+                />
+              ))}
+            </div>
+
+            <Link href="/team" className="btn-outline">
+              Meet All Nodes
+            </Link>
+          </div>
+        )}
         
       </div>
     </section>

@@ -1,16 +1,12 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import PageWrapper from "../../components/layout/PageWrapper";
 import SectionHeading from "../../components/design-system/SectionHeading";
-import Paper from "../../components/design-system/Paper";
-import Sticker from "../../components/design-system/Sticker";
-
 import { PageSkeleton, CardSkeleton } from "../../components/ui/Skeleton";
-import Button from "../../components/ui/Button";
 import Link from "next/link";
-import { FiCalendar, FiMapPin, FiClock } from "react-icons/fi";
 import { api } from "../../lib/api";
+import { FiArrowUpRight } from "react-icons/fi";
 
 function formatTime(timeStr) {
   if (!timeStr || !timeStr.includes(':')) return timeStr;
@@ -19,82 +15,46 @@ function formatTime(timeStr) {
     const d = new Date();
     d.setHours(parseInt(h, 10));
     d.setMinutes(parseInt(m, 10));
-    return d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+    return d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }).toLowerCase();
   } catch {
     return timeStr;
   }
 }
 
-function formatDate(dateStr) {
+function formatDateShort(dateStr) {
   if (!dateStr) return '';
   try {
-    const d = new Date(dateStr);
+    const d = new Date(dateStr.includes('T') ? dateStr : dateStr + "T12:00:00");
     if (isNaN(d.getTime())) return dateStr;
-    return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric', timeZone: 'UTC' });
+    return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
   } catch {
     return dateStr;
   }
 }
 
-function formatDateTimeRange(date, time, endDate, endTime) {
+function formatSmartDateTimeRange(date, time, endDate, endTime) {
   if (!date) return "";
   
-  const fDate = formatDate(date);
+  const fDate = formatDateShort(date);
   const fTime = time ? formatTime(time) : "";
-  const fEndDate = endDate && endDate !== date ? formatDate(endDate) : "";
+  const fEndDate = endDate && endDate !== date ? formatDateShort(endDate) : "";
   const fEndTime = endTime ? formatTime(endTime) : "";
 
   if (fEndDate && fEndDate !== fDate) {
-    return `${fDate}${fTime ? ` ${fTime}` : ''} to ${fEndDate}${fEndTime ? ` ${fEndTime}` : ''}`;
+    return `${fDate}${fTime ? ` ${fTime}` : ''} - ${fEndDate}${fEndTime ? ` ${fEndTime}` : ''}`;
   } else {
     if (fTime && fEndTime && fTime !== fEndTime) {
-      return `${fDate}, ${fTime} to ${fEndTime}`;
+      return `${fDate} • ${fTime} - ${fEndTime}`;
     } else {
-      return `${fDate}${fTime ? `, ${fTime}` : ''}`;
+      return `${fDate}${fTime ? ` • ${fTime}` : ''}`;
     }
   }
-}
-
-function getPastEventStyles(event) {
-  if (event.status !== "past") {
-    return { opacity: "", grayscale: "", badgeText: null };
-  }
-
-  let daysPast = null;
-  if (event.end_date || event.date) {
-    try {
-      const eventDate = new Date(event.end_date || event.date);
-      if (!isNaN(eventDate.getTime())) {
-        const now = new Date();
-        daysPast = Math.floor((now - eventDate) / (1000 * 60 * 60 * 24));
-      }
-    } catch {
-    }
-  }
-
-  if (daysPast == null || daysPast < 0) {
-    return { opacity: "opacity-90", grayscale: "grayscale-[0.3]", badgeText: "PAST" };
-  }
-
-  if (daysPast <= 1) {
-    return { opacity: "opacity-[0.9]", grayscale: "grayscale-[0.1]", badgeText: "JUST ENDED" };
-  }
-  if (daysPast <= 3) {
-    return { opacity: "opacity-[0.8]", grayscale: "grayscale-[0.3]", badgeText: `${daysPast}D AGO` };
-  }
-  if (daysPast <= 7) {
-    return { opacity: "opacity-[0.65]", grayscale: "grayscale-[0.45]", badgeText: `${daysPast}D AGO` };
-  }
-  if (daysPast <= 30) {
-    return { opacity: "opacity-[0.55]", grayscale: "grayscale-[0.55]", badgeText: "PAST" };
-  }
-  return { opacity: "opacity-[0.45]", grayscale: "grayscale-[0.65]", badgeText: "PAST" };
 }
 
 export default function EventsList() {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [filter, setFilter] = useState("all"); 
+  const [showPastEvents, setShowPastEvents] = useState(false);
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -113,6 +73,11 @@ export default function EventsList() {
           return event;
         });
         setEvents(smartEvents);
+        
+        const hasUpcoming = smartEvents.some(e => e.status !== 'past');
+        if (!hasUpcoming && smartEvents.length > 0) {
+          setShowPastEvents(true);
+        }
       } catch (err) {
         console.error(err);
       } finally {
@@ -122,6 +87,46 @@ export default function EventsList() {
     fetchEvents();
   }, []);
 
+  const { upcomingGroups, pastGroups } = useMemo(() => {
+    const upcoming = {};
+    const past = {};
+
+    events.forEach(event => {
+      if (!event.date) return;
+      const dateObj = new Date(event.date.includes('T') ? event.date : event.date + "T12:00:00");
+      if (isNaN(dateObj.getTime())) return;
+      
+      const monthYear = dateObj.toLocaleDateString("en-US", { month: "long", year: "numeric" });
+      const isPast = event.status === 'past';
+      const targetGroup = isPast ? past : upcoming;
+      
+      if (!targetGroup[monthYear]) {
+        targetGroup[monthYear] = {
+          label: monthYear,
+          timestamp: dateObj.getTime(),
+          events: []
+        };
+      }
+      
+      targetGroup[monthYear].events.push({
+        ...event,
+        dateObj,
+      });
+    });
+
+    const sortedUpcoming = Object.values(upcoming).sort((a, b) => a.timestamp - b.timestamp);
+    sortedUpcoming.forEach(group => {
+      group.events.sort((a, b) => a.dateObj.getTime() - b.dateObj.getTime());
+    });
+
+    const sortedPast = Object.values(past).sort((a, b) => b.timestamp - a.timestamp);
+    sortedPast.forEach(group => {
+      group.events.sort((a, b) => b.dateObj.getTime() - a.dateObj.getTime());
+    });
+
+    return { upcomingGroups: sortedUpcoming, pastGroups: sortedPast };
+  }, [events]);
+
   if (loading) return <PageWrapper pattern="grid">
       <div className="container mx-auto max-w-7xl px-4 pt-8 pb-20">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
@@ -130,131 +135,115 @@ export default function EventsList() {
       </div>
     </PageWrapper>;
 
-  const filteredEvents = filter === "all" 
-    ? events 
-    : events.filter(e => e.status === filter);
-
-  const sortedEvents = [...filteredEvents].sort((a, b) => {
-    const statusWeight = { ongoing: 0, upcoming: 1, past: 2 };
-    if (statusWeight[a.status] !== statusWeight[b.status]) {
-      return statusWeight[a.status] - statusWeight[b.status];
-    }
-    return new Date(b.end_date || b.date || 0) - new Date(a.end_date || a.date || 0);
-  });
+  const displayedGroups = showPastEvents ? [...upcomingGroups, ...pastGroups] : upcomingGroups;
 
   return (
     <PageWrapper pattern="gingham">
-      <div className="container mx-auto max-w-6xl px-4">
+      <div className="container mx-auto max-w-5xl px-4 pt-12 pb-24">
         
-        <SectionHeading 
-          title="Events" 
-          subtitle="Workshops, hackathons, guest lectures, and community meetups."
-          metadata="CLUB CALENDAR"
-          className="mb-12"
-        />
-
-        <div className="flex flex-wrap gap-4 mb-16">
-          <Button variant={filter === "all" ? "primary" : "outline"} size="sm" onClick={() => setFilter("all")}>All Events</Button>
-          <Button variant={filter === "upcoming" ? "primary" : "outline"} size="sm" onClick={() => setFilter("upcoming")}>Upcoming</Button>
-          <Button variant={filter === "ongoing" ? "primary" : "outline"} size="sm" onClick={() => setFilter("ongoing")}>Ongoing</Button>
-          <Button variant={filter === "past" ? "primary" : "outline"} size="sm" onClick={() => setFilter("past")}>Past</Button>
+        <div className="mb-16">
+          <SectionHeading 
+            title="Events" 
+            subtitle="Discover and join our upcoming meetups, conferences, and community gatherings. Stay connected with the latest events happening around you."
+            metadata="GET INVOLVED"
+            className="mb-8"
+          />
         </div>
 
-        <div className="flex flex-col gap-12 mb-20">
-          {sortedEvents.length > 0 ? (
-            sortedEvents.map((event, i) => {
-              const isPast = event.status === 'past';
-              const isOngoing = event.status === 'ongoing';
-              const pastStyles = getPastEventStyles(event);
-              
-              return (
-                <Paper 
-                  key={event.id}
-                  variant={i % 2 === 0 ? "stacked" : "default"}
-                  rotate={i % 2 === 0 ? 1 : -1}
-                  className={`flex flex-col md:flex-row p-0 overflow-hidden transition-opacity duration-300 ${pastStyles.opacity}`}
-                >
-                  <div className={`md:w-2/5 aspect-[4/3] md:aspect-auto border-b-brutal md:border-b-0 md:border-r-brutal relative bg-gray-100 dark:bg-gray-800 ${pastStyles.grayscale}`}>
-                    {event.banner ? (
-                      <img src={event.banner} alt={event.title} className="w-full h-full object-cover" />
-                    ) : (
-                      <div className="w-full h-full flex flex-col items-center justify-center font-mono text-gray-400 bg-[var(--color-bg-gingham)]">
-                        <img src="https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=2000&auto=format&fit=crop" alt="Fluid flow fallback" className="w-full h-full object-cover" />
-                      </div>
-                    )}
-                    
-                    <div className="absolute top-4 left-4 z-10 flex flex-col gap-2">
-                      {isOngoing && <Sticker color="lime" size="md" animate={false}>ONGOING</Sticker>}
-                      {!isOngoing && !isPast && <Sticker color="yellow" size="md" animate={false}>UPCOMING</Sticker>}
-                      {isPast && (
-                        <Sticker color="black" size="md" animate={false}>
-                          {pastStyles.badgeText || "PAST"}
-                        </Sticker>
-                      )}
-                    </div>
-                  </div>
+        <div className="space-y-16 relative">
+          <div className="absolute left-[7px] md:left-[7px] top-4 bottom-0 w-[2px] bg-gradient-to-b from-[#6366f1]/40 via-[#6366f1]/20 to-transparent hidden md:block"></div>
 
-                  <div className="md:w-3/5 p-6 md:p-10 flex flex-col bg-white dark:bg-[#161b22]">
-                    <h3 className="font-display font-black text-3xl md:text-4xl uppercase mb-6 leading-tight dark:text-white">
-                      {event.title}
-                    </h3>
-                    
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8 font-mono font-bold text-sm bg-[var(--color-paper-cream)] dark:bg-[#0d1117] p-4 border-brutal">
-                      {(event.date || event.time) && (
-                        <div className="flex items-center gap-3 sm:col-span-2">
-                          <div className="w-8 h-8 rounded-full bg-[var(--color-sticker-pink)] border-2 border-black flex items-center justify-center flex-shrink-0">
-                            <FiCalendar />
-                          </div>
-                          <span>
-                            {formatDateTimeRange(event.date, event.time, event.end_date, event.end_time)}
-                          </span>
-                        </div>
-                      )}
-                      {event.venue && (
-                        <div className="flex items-center gap-3 sm:col-span-2">
-                          <div className="w-8 h-8 rounded-full bg-[var(--color-sticker-blue)] border-2 border-black flex items-center justify-center flex-shrink-0">
-                            <FiMapPin />
-                          </div>
-                          <span>{event.venue}</span>
-                        </div>
-                      )}
-                    </div>
+          <div className="flex justify-end items-center mb-8 relative z-20">
+             <label className="flex items-center cursor-pointer group">
+              <div className="relative">
+                <input type="checkbox" className="sr-only" checked={showPastEvents} onChange={() => setShowPastEvents(!showPastEvents)} />
+                <div className={`block w-11 h-6 rounded-full transition-colors ${showPastEvents ? 'bg-[#6366f1]' : 'bg-gray-300 dark:bg-gray-700'}`}></div>
+                <div className={`absolute left-[2px] top-[2px] bg-white w-5 h-5 rounded-full transition-transform ${showPastEvents ? 'transform translate-x-5' : ''}`}></div>
+              </div>
+              <div className="ml-3 font-semibold text-sm text-[var(--color-text-secondary)] group-hover:text-[var(--color-text-primary)] transition-colors">Past events</div>
+            </label>
+          </div>
 
-                    <p className="font-body text-lg text-gray-700 dark:text-gray-300 mb-8 line-clamp-3">
-                      {event.description}
-                    </p>
+          {displayedGroups.length > 0 ? displayedGroups.map((group, groupIndex) => (
+            <div key={`${group.label}-${groupIndex}`} className="relative z-10">
+              <div className="flex items-center gap-4 mb-8">
+                <div className="hidden md:block w-4 h-4 rounded-full bg-[#6366f1] flex-shrink-0 z-10 relative -left-[0px]"></div>
+                
+                <h2 className="text-2xl md:text-3xl font-display font-black text-[var(--color-text-primary)] flex items-baseline gap-3 tracking-tight">
+                  {group.label}
+                  <span className="text-lg md:text-xl font-normal text-[var(--color-text-muted)] tracking-normal font-sans">
+                    {group.events.length} event{group.events.length !== 1 ? 's' : ''}
+                  </span>
+                </h2>
+              </div>
 
-                    <div className="mt-auto flex flex-wrap gap-4 items-center">
-                      <Button href={`/events/${event.slug}`} variant="secondary">
-                        {isPast ? "View Recap" : "Event Details"}
-                      </Button>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:pl-10">
+                {group.events.map((event) => (
+                  <div key={event.id} className={`flex flex-col h-full bg-white dark:bg-[#161b22] rounded-2xl overflow-hidden border border-gray-200 dark:border-gray-800 hover:shadow-xl transition-all duration-300 group ${event.status === 'past' ? 'opacity-75 grayscale-[0.2] hover:opacity-100 hover:grayscale-0' : ''}`}>
+                    <Link href={`/events/${event.slug}`} className="flex flex-col flex-grow">
                       
-                      {!isPast && event.registration_link && (
-                        <a 
-                          href={event.registration_link} 
-                          target="_blank" 
-                          rel="noreferrer"
-                          className="font-mono font-bold uppercase underline decoration-2 underline-offset-4 hover:bg-[var(--color-sticker-lime)] transition-colors px-2"
-                        >
-                          Register Now &#x2197;
-                        </a>
-                      )}
+                      <div className="relative aspect-[2/1] w-full bg-gray-100 dark:bg-gray-900 overflow-hidden border-b border-gray-100 dark:border-gray-800">
+                         {(event.banner || event.image) ? (
+                           <img src={event.banner || event.image} alt={event.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                         ) : (
+                           <div className="w-full h-full bg-[var(--color-glass-bg)] flex items-center justify-center hex-grid-bg opacity-50"></div>
+                         )}
+                         
+                         {event.venue && (
+                           <div className="absolute top-4 right-4 bg-gray-900/90 text-white text-xs font-black px-3 py-1.5 rounded uppercase tracking-widest shadow-sm">
+                             {event.venue.split(',')[0]}
+                           </div>
+                         )}
+
+                         {event.status === 'past' && (
+                           <div className="absolute top-4 left-4 bg-black/80 text-white text-xs font-black px-3 py-1.5 rounded uppercase tracking-widest shadow-sm">
+                             PAST
+                           </div>
+                         )}
+                      </div>
+
+                      <div className="p-6 md:p-8 flex flex-col">
+                         <h3 className="font-display font-bold text-xl md:text-2xl text-gray-900 dark:text-white mb-2 leading-snug group-hover:text-[#6366f1] transition-colors line-clamp-2">
+                           {event.title}
+                         </h3>
+                      </div>
+                    </Link>
+
+                    <div className="px-6 md:px-8 pb-6 md:pb-8 pt-0 mt-auto flex flex-wrap items-center justify-between gap-4">
+                       <div className="font-sans text-sm text-gray-700 dark:text-gray-300 flex items-center gap-2 flex-wrap flex-1 min-w-0">
+                         <span className="font-bold whitespace-nowrap text-gray-900 dark:text-gray-100">
+                           {formatSmartDateTimeRange(event.date, event.time, event.end_date, event.end_time)}
+                         </span>
+                         {event.organizer && (
+                           <div className="flex items-center gap-2 min-w-0 flex-1">
+                             <span className="text-gray-400 flex-shrink-0">•</span>
+                             <span className="truncate font-medium">{event.organizer}</span>
+                           </div>
+                         )}
+                       </div>
+                       
+                       {event.registration_link && event.status !== 'past' && (
+                         <a 
+                           href={event.registration_link}
+                           target="_blank"
+                           rel="noreferrer"
+                           className="flex-shrink-0 inline-flex items-center justify-center gap-2 bg-[#6366f1] text-white hover:bg-[#4f46e5] shadow-sm hover:shadow-md hover:-translate-y-0.5 px-6 py-2.5 rounded-xl text-xs font-bold uppercase tracking-widest transition-all w-full sm:w-auto"
+                         >
+                           Register <FiArrowUpRight className="w-3.5 h-3.5" />
+                         </a>
+                       )}
                     </div>
                   </div>
-                </Paper>
-              );
-            })
-          ) : (
-            <Paper variant="default" className="text-center py-20">
-              <h3 className="font-display font-black text-2xl uppercase mb-2">No events found</h3>
-              <p className="font-mono">Try changing your filters.</p>
-            </Paper>
+                ))}
+              </div>
+            </div>
+          )) : (
+            <div className="text-center py-20 text-[var(--color-text-secondary)] bg-[var(--color-glass-bg)] rounded-3xl border border-dashed border-[var(--color-border-subtle)]">
+              <p className="font-medium text-lg">No events found.</p>
+            </div>
           )}
         </div>
       </div>
-
-
-
     </PageWrapper>
   );
 }

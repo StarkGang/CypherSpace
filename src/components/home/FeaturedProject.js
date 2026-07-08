@@ -33,9 +33,9 @@ export default function FeaturedProject({ project }) {
                   key={i}
                   className="px-3 py-1 rounded-md text-[10px] font-mono tracking-widest uppercase font-bold"
                   style={{
-                    background: "rgba(37, 99, 235, 0.1)",
-                    border: "1px solid rgba(37, 99, 235, 0.2)",
-                    color: "#2563eb",
+                    background: "rgba(0, 174, 239, 0.1)",
+                    border: "1px solid rgba(0, 174, 239, 0.2)",
+                    color: "var(--color-primary-accent)",
                   }}
                 >
                   {tag}
@@ -45,11 +45,7 @@ export default function FeaturedProject({ project }) {
 
             <Link
               href={`/projects/${project.slug}`}
-              className="inline-flex items-center gap-3 px-6 py-3 rounded-xl font-semibold text-sm transition-all duration-300 group"
-              style={{
-                background: "#2563eb",
-                color: "#fff",
-              }}
+              className="btn-solid-primary mt-2 shadow-[0_0_20px_var(--color-neon-glow)] group"
             >
               View Repository 
               <span className="transform group-hover:translate-x-1 transition-transform">→</span>
@@ -76,8 +72,8 @@ export default function FeaturedProject({ project }) {
                 {(project.cover_image || project.image) ? (
                   <img src={project.cover_image || project.image} alt={project.title} className="w-full h-full object-cover brightness-90 group-hover:brightness-110 transition-all" />
                 ) : (
-                  <div className="w-full h-full flex flex-col items-center justify-center hex-grid-bg">
-                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" strokeWidth="1.5" stroke="#2563eb" className="relative z-10">
+                  <div className="w-full h-full flex flex-col items-center justify-center hex-grid-bg bg-[var(--color-bg-deep)]">
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" strokeWidth="1.5" stroke="var(--color-primary-accent)" className="relative z-10">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-2 1m2-1l-2-1m2 1v2.5M14 4l-2-1-2 1M4 7l2-1M4 7l2 1M4 7v2.5M12 21l-2-1m2 1l2-1m-2 1v-2.5M6 18l-2-1v-2.5M18 18l2-1v-2.5" />
                     </svg>
                     <span className="mt-4 font-mono text-xs uppercase tracking-widest text-[var(--color-text-muted)] relative z-10">Smart_Contract.deploy</span>
