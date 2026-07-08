@@ -20,7 +20,7 @@ export default function UpcomingEvents({ events }) {
         >
           {[...Array(4)].map((_, i) => (
             <span key={i} className="font-display font-bold text-[8vw] leading-none uppercase text-white/40 tracking-tight px-8">
-              UPCOMING EVENTS — NETWORK UPGRADES — 
+              UPCOMING EVENTS
             </span>
           ))}
         </motion.div>

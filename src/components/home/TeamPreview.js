@@ -1,11 +1,20 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { FaGithub, FaLinkedin, FaGlobe } from "react-icons/fa";
 
 export default function TeamPreview({ team }) {
   const [activeIdx, setActiveIdx] = useState(Math.floor((team?.length || 0) / 2));
+  
+  useEffect(() => {
+    if (!team || team.length === 0) return;
+    const interval = setInterval(() => {
+      setActiveIdx((prev) => (prev + 1) % team.length);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, [team]);
+
   if (!team || team.length === 0) return null;
 
   const activeMember = team[activeIdx];
@@ -14,7 +23,6 @@ export default function TeamPreview({ team }) {
     <section className="py-24 px-4 w-full relative z-10 overflow-hidden bg-[var(--color-bg-deep)]">
       <div className="container mx-auto w-full max-w-full px-0">
         <div className="flex justify-center items-center h-64 md:h-80 mb-12 relative -mx-4 md:-mx-12">
-          <div className="absolute top-1/2 left-0 right-0 h-[1px] bg-white/10 -z-10"></div>
           
           <div className="flex items-center justify-center gap-2 md:gap-4 px-2 md:px-8 w-full">
             {team.map((member, index) => {
